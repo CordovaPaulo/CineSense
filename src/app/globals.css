@@ -1,0 +1,119 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-homecard: var(--homecard);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --main-text-color: var(--textclr);
+  --color-homepage-bot-card1: var(--homepage-bot-card1);
+  --color-homepage-bot-card2: var(--homepage-bot-card2);
+  --color-homepage-bot-card3: var(--homepage-bot-card3);
+  --color-homepage-bot-card4: var(--homepage-bot-card4);
+  --sub-main-text-color: var(--sub-main-text-color);
+}
+:root {
+  --radius: 0.625rem;
+
+  /* Base surfaces */
+  --background: #000000;
+  --foreground: #ffffff;
+  --homecard: #343131;           /* card/surface */
+  --card-foreground: #ffffff;
+  --popover: #000000;
+  --popover-foreground: #ffffff;
+
+  /* Brand */
+  --primary: #8E1616;            /* deep red */
+  --primary-foreground: #ffffff;
+  --secondary: #B85252;          /* soft red */
+  --secondary-foreground: #ffffff;
+  --accent: #ffbd4c;             /* amber */
+  --accent-foreground: #000000;
+
+  /* UI */
+  --border: #343131;
+  --input: #343131;
+  --ring: #FFB22C;
+
+  /* Charts/sidebar (optional keep) */
+  --chart-1: #8E1616;
+  --chart-2: #FFB22C;
+  --chart-3: #B85252;
+  --chart-4: #343131;
+  --chart-5: #000000;
+
+  /* Custom text helpers */
+  --textclr: #ffffff;            /* main text */
+  --sub-main-text-color: #ffc96d;/* hover accent for text */
+
+  /* ...existing vars can stay... */
+}
+
+/* Keep dark same palette (can tweak if needed) */
+.dark {
+  --background: #000000;
+  --foreground: #ffffff;
+  --homecard: #343131;
+  --card-foreground: #ffffff;
+  --popover: #000000;
+  --popover-foreground: #ffffff;
+
+  --primary: #8E1616;
+  --primary-foreground: #ffffff;
+  --secondary: #B85252;
+  --secondary-foreground: #ffffff;
+  --accent: #FFB22C;
+  --accent-foreground: #000000;
+
+  --border: #343131;
+  --input: #343131;
+  --ring: #FFB22C;
+
+  --textclr: #ffffff;
+  --sub-main-text-color: #FFB22C;
+}
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
