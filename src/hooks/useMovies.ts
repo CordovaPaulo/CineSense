@@ -1,168 +1,122 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useMemo } from 'react';
+import {
+  useInfiniteQuery,
+  useQuery,
+  QueryKey,
+  keepPreviousData,
+} from '@tanstack/react-query';
 import { fetchMovies, fetchMovieById } from '@/services/tmdb-service';
 import type { Movie, BrowseOptions, TMDBResponse } from '@/interfaces/interface';
 
-interface UseMoviesState {
+const moviesKey = (opts: BrowseOptions): QueryKey => ['movies', opts];
+const movieKey = (id: number | null): QueryKey => ['movie', id];
+
+export interface UseMoviesResult {
   movies: Movie[];
   loading: boolean;
   error: string | null;
   page: number;
   totalPages: number;
   totalResults: number;
-}
-
-interface UseMoviesResult extends UseMoviesState {
   refetch: () => void;
   loadMore: () => void;
+  hasMore: boolean;
+  isFetchingNext: boolean;
 }
 
 export function useMovies(options: BrowseOptions = {}): UseMoviesResult {
-  const [state, setState] = useState<UseMoviesState>({
-    movies: [],
-    loading: true,
-    error: null,
-    page: 1,
-    totalPages: 0,
-    totalResults: 0,
+  const {
+    data,
+    error,
+    isLoading,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<TMDBResponse<Movie>, Error, TMDBResponse<Movie>, QueryKey, number>({
+    queryKey: moviesKey(options),
+    queryFn: ({ pageParam }) => fetchMovies({ ...options, page: pageParam }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
+    staleTime: 60_000,
+    gcTime: 60 * 60 * 1000,
   });
 
-  const fetchData = useCallback(async (pageNum: number = 1) => {
-    setState(prev => ({ ...prev, loading: true, error: null }));
-
-    try {
-      const response: TMDBResponse<Movie> = await fetchMovies({
-        ...options,
-        page: pageNum,
-      });
-
-      setState(prev => ({
-        ...prev,
-        movies: pageNum === 1 ? response.results : [...prev.movies, ...response.results],
-        loading: false,
-        page: response.page,
-        totalPages: response.total_pages,
-        totalResults: response.total_results,
-      }));
-    } catch (err) {
-      setState(prev => ({
-        ...prev,
-        loading: false,
-        error: err instanceof Error ? err.message : 'Failed to fetch movies',
-      }));
+  const aggregate = useMemo(() => {
+    // useInfiniteQuery returns a data object with a pages array
+    // but our generic type TMDBResponse<Movie> represents each page item
+    // so we need to cast the data structure to access pages safely.
+    // When data is undefined we return empty aggregate.
+    // Type narrowing here keeps Movie[] typed.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const infinite = data as any;
+    if (!infinite || !infinite.pages) {
+      return { movies: [] as Movie[], page: 1, totalPages: 0, totalResults: 0 };
     }
-  }, [options]);
-
-  useEffect(() => {
-    fetchData(1);
-  }, [fetchData]);
-
-  const refetch = useCallback(() => {
-    fetchData(1);
-  }, [fetchData]);
-
-  const loadMore = useCallback(() => {
-    if (state.page < state.totalPages && !state.loading) {
-      fetchData(state.page + 1);
-    }
-  }, [state.page, state.totalPages, state.loading, fetchData]);
+    const pages: TMDBResponse<Movie>[] = infinite.pages;
+    const last = pages[pages.length - 1];
+    return {
+      movies: pages.flatMap((p: TMDBResponse<Movie>) => p.results),
+      page: last.page,
+      totalPages: last.total_pages,
+      totalResults: last.total_results,
+    };
+  }, [data]);
 
   return {
-    ...state,
+    movies: aggregate.movies,
+    loading: isLoading && !data,
+    error: error ? error.message : null,
+    page: aggregate.page,
+    totalPages: aggregate.totalPages,
+    totalResults: aggregate.totalResults,
     refetch,
-    loadMore,
+    loadMore: () => { if (hasNextPage) fetchNextPage(); },
+    hasMore: !!hasNextPage,
+    isFetchingNext: isFetchingNextPage,
   };
 }
 
-interface UseMovieByIdState {
+export interface UseMovieByIdResult {
   movie: Movie | null;
   loading: boolean;
   error: string | null;
-}
-
-interface UseMovieByIdResult extends UseMovieByIdState {
   refetch: () => void;
 }
 
 export function useMovieById(id: number | null): UseMovieByIdResult {
-  const [state, setState] = useState<UseMovieByIdState>({
-    movie: null,
-    loading: !!id,
-    error: null,
+  const { data, error, isLoading, refetch } = useQuery<Movie, Error>({
+    queryKey: movieKey(id),
+    queryFn: () => {
+      if (id == null) throw new Error('No id');
+      return fetchMovieById(id);
+    },
+    enabled: id != null,
+    staleTime: 5 * 60_000,
+    placeholderData: keepPreviousData,
   });
 
-  const fetchData = useCallback(async () => {
-    if (!id) {
-      setState({ movie: null, loading: false, error: null });
-      return;
-    }
-
-    setState(prev => ({ ...prev, loading: true, error: null }));
-
-    try {
-      const movie = await fetchMovieById(id);
-      setState({ movie, loading: false, error: null });
-    } catch (err) {
-      setState({
-        movie: null,
-        loading: false,
-        error: err instanceof Error ? err.message : 'Failed to fetch movie',
-      });
-    }
-  }, [id]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  const refetch = useCallback(() => {
-    fetchData();
-  }, [fetchData]);
-
   return {
-    ...state,
+    movie: data ?? null,
+    loading: isLoading && !data,
+    error: error ? error.message : null,
     refetch,
   };
 }
 
 export function useBrowseMovies(searchQuery: string = '') {
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const trimmed = searchQuery.trim();
+  const { data, error, isLoading, isFetching } = useQuery<TMDBResponse<Movie>, Error>({
+    queryKey: ['browse-movies', { q: trimmed }],
+    queryFn: () => fetchMovies({ page: 1, language: 'en-US', query: trimmed || undefined }),
+    placeholderData: keepPreviousData,
+    staleTime: 30_000,
+  });
 
-  useEffect(() => {
-    let cancelled = false;
-
-    const loadMovies = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await fetchMovies({
-          page: 1,
-          language: 'en-US',
-          query: searchQuery.trim() || undefined,
-        });
-
-        if (!cancelled) {
-          setMovies(response.results);
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Failed to load movies');
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    };
-
-    loadMovies();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [searchQuery]);
-
-  return { movies, loading, error };
+  return {
+    movies: data?.results ?? [],
+    loading: isLoading && !data,
+    fetching: isFetching,
+    error: error ? error.message : null,
+  };
 }

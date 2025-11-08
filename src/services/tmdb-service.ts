@@ -1,6 +1,6 @@
 import type { Movie, TVShow, BrowseOptions, TMDBResponse } from '@/interfaces/interface';
 
-export async function fetchMovies(options: BrowseOptions = {}): Promise<TMDBResponse<Movie>> {
+export async function fetchMovies(options: BrowseOptions = {}, init?: RequestInit): Promise<TMDBResponse<Movie>> {
   const params = new URLSearchParams();
   
   if (options.page) params.set('page', String(options.page));
@@ -19,7 +19,7 @@ export async function fetchMovies(options: BrowseOptions = {}): Promise<TMDBResp
   if (options.includeAdult !== undefined) params.set('include_adult', String(options.includeAdult));
 
   const url = `/api/browse/movies?${params.toString()}`;
-  const response = await fetch(url, { cache: 'no-store' });
+  const response = await fetch(url, { cache: 'no-store', ...init });
   
   if (!response.ok) {
     throw new Error(`Failed to fetch movies: ${response.status} ${response.statusText}`);
@@ -28,7 +28,7 @@ export async function fetchMovies(options: BrowseOptions = {}): Promise<TMDBResp
   return response.json();
 }
 
-export async function fetchTVShows(options: BrowseOptions = {}): Promise<TMDBResponse<TVShow>> {
+export async function fetchTVShows(options: BrowseOptions = {}, init?: RequestInit): Promise<TMDBResponse<TVShow>> {
   const params = new URLSearchParams();
   
   if (options.page) params.set('page', String(options.page));
@@ -46,7 +46,7 @@ export async function fetchTVShows(options: BrowseOptions = {}): Promise<TMDBRes
   if (options.actor) params.set('actor', options.actor);
 
   const url = `/api/browse/shows?${params.toString()}`;
-  const response = await fetch(url, { cache: 'no-store' });
+  const response = await fetch(url, { cache: 'no-store', ...init });
   
   if (!response.ok) {
     throw new Error(`Failed to fetch TV shows: ${response.status} ${response.statusText}`);
@@ -58,8 +58,8 @@ export async function fetchTVShows(options: BrowseOptions = {}): Promise<TMDBRes
 /**
  * Fetch a single movie by ID
  */
-export async function fetchMovieById(id: number): Promise<Movie> {
-  const response = await fetch(`/api/browse/movies/${id}`, { cache: 'no-store' });
+export async function fetchMovieById(id: number, init?: RequestInit): Promise<Movie> {
+  const response = await fetch(`/api/browse/movies/${id}`, { cache: 'no-store', ...init });
   
   if (!response.ok) {
     throw new Error(`Failed to fetch movie ${id}: ${response.status} ${response.statusText}`);
@@ -71,8 +71,8 @@ export async function fetchMovieById(id: number): Promise<Movie> {
 /**
  * Fetch a single TV show by ID
  */
-export async function fetchTVShowById(id: number): Promise<TVShow> {
-  const response = await fetch(`/api/browse/shows/${id}`, { cache: 'no-store' });
+export async function fetchTVShowById(id: number, init?: RequestInit): Promise<TVShow> {
+  const response = await fetch(`/api/browse/shows/${id}`, { cache: 'no-store', ...init });
   
   if (!response.ok) {
     throw new Error(`Failed to fetch TV show ${id}: ${response.status} ${response.statusText}`);

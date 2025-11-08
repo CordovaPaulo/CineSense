@@ -4,6 +4,7 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { MuiThemeProvider } from "../lib/mui-theme-provider"
 import { Navbar } from "../components/layout/navbar"
+import { QueryProvider } from "@/lib/query-client-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,11 +34,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <MuiThemeProvider>
-          <Navbar />
-          {children}
-        </MuiThemeProvider>
-        <Analytics />
+        <QueryProvider>
+          <MuiThemeProvider>
+            <Navbar />
+            {children}
+          </MuiThemeProvider>
+          <Analytics />
+        </QueryProvider>
       </body>
     </html>
   );
