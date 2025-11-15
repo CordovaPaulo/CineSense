@@ -4,6 +4,8 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { MuiThemeProvider } from "../lib/mui-theme-provider"
 import { Navbar } from "../components/layout/navbar"
+import Footer from "../components/layout/footer"
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +38,7 @@ export default function RootLayout({
         <MuiThemeProvider>
           <Navbar />
           {children}
+           <Footer />
         </MuiThemeProvider>
         <Analytics />
       </body>
