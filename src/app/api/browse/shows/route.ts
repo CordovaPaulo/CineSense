@@ -11,28 +11,24 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const page = searchParams.get('page') ?? '1';
   const language = searchParams.get('language') ?? 'en-US';
-  const timeWindow = (searchParams.get('timeWindow') ?? 'day').toLowerCase(); // day|week
+  const timeWindow = (searchParams.get('timeWindow') ?? 'day').toLowerCase(); 
   const q = searchParams.get('q')?.trim();
   const explicitDiscover = searchParams.get('mode') === 'discover';
-
-  // Optional discover filters
   const sortBy = searchParams.get('sort_by') ?? 'popularity.desc';
-  const originalLang = searchParams.get('originalLang') ?? undefined; // "en", "ja", ...
-  const yearRange = searchParams.get('year_range'); // "2010,2020"
+  const originalLang = searchParams.get('originalLang') ?? undefined; 
+  const yearRange = searchParams.get('year_range'); 
   const startYear = searchParams.get('startYear');
   const endYear = searchParams.get('endYear');
-  const withGenresIds = searchParams.get('with_genres'); // "18,35"
-  const genresByName = searchParams.get('genres');       // "Drama,Comedy"
-  const actorName = searchParams.get('actor');           // person name -> with_people
+  const withGenresIds = searchParams.get('with_genres'); 
+  const genresByName = searchParams.get('genres');       
+  const actorName = searchParams.get('actor');           
 
   const headers = {
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json;charset=utf-8',
   };
 
-  // Decide mode: search > discover > trending
   if (q) {
-    // Search TV shows
     const url = `${TMDB_BASE}/search/tv?query=${encodeURIComponent(q)}&language=${encodeURIComponent(language)}&page=${encodeURIComponent(page)}&include_adult=false`;
     try {
       const res = await fetch(url, { headers, next: { revalidate: 30 } });
@@ -99,7 +95,6 @@ export async function GET(req: Request) {
 
     if (actorName) {
       const personId = await getPersonId(actorName);
-      // with_people works for discover across media; TMDB supports it on discover/tv
       if (personId) params.set('with_people', String(personId));
     }
 

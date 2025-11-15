@@ -2,21 +2,12 @@
 
 import { useState } from "react";
 import { Box, Container, Typography, Button } from "@mui/material";
-import useBrowseList from "@/hooks/useBrowseList";
+import { useBrowseShows } from "@/hooks/useShows";
 import { ShowCard } from "@/components/cards/show-card";
-
-interface TVShow {
-  id: number
-  name: string
-  poster_path: string | null
-  overview: string
-  first_air_date: string
-  vote_average: number
-}
 
 export default function BrowseTVShows() {
   const [searchQuery, setSearchQuery] = useState("")
-  const { items: tvShows, loading, error } = useBrowseList<TVShow>("tv", searchQuery)
+  const { shows, loading, error } = useBrowseShows(searchQuery)
 
   return (
     <Box sx={{ p: 4 }} className="min-h-screen bg-linear-to-b from-[#000000] via-[#0f0a0a] to-[#6e0a0a]">
@@ -39,7 +30,7 @@ export default function BrowseTVShows() {
         {error && <Typography sx={{ mt: 4 }} color="error">Failed to load.</Typography>}
 
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {tvShows.map((s) => (
+          {shows.map((s) => (
             <ShowCard key={s.id} show={s} />
           ))}
         </div>

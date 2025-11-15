@@ -10,30 +10,26 @@ export async function GET(req: Request) {
 
   const { searchParams } = new URL(req.url);
 
-  // Shared inputs
   const page = searchParams.get('page') ?? '1';
   const language = searchParams.get('language') ?? 'en-US';
 
-  // Discover-only filters (optional)
-  const originalLang = searchParams.get('originalLang') ?? undefined; // e.g., "en", "ja"
+  const originalLang = searchParams.get('originalLang') ?? undefined; 
   const sortBy = searchParams.get('sort_by') ?? 'popularity.desc';
   const includeAdult = searchParams.get('include_adult') ?? 'false';
   const yearRange = searchParams.get('year_range');
   const startYear = searchParams.get('startYear');
   const endYear = searchParams.get('endYear');
-  const withGenresIds = searchParams.get('with_genres'); // "28,35"
-  const genresByName = searchParams.get('genres');       // "Action,Comedy"
-  const actorName = searchParams.get('actor');           // Name to resolve to with_cast
+  const withGenresIds = searchParams.get('with_genres');
+  const genresByName = searchParams.get('genres');      
+  const actorName = searchParams.get('actor');           
 
-  // Trending controls
-  const timeWindow = (searchParams.get('timeWindow') ?? 'day').toLowerCase(); // day|week
+  const timeWindow = (searchParams.get('timeWindow') ?? 'day').toLowerCase(); 
 
   const headers = {
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json;charset=utf-8',
   };
 
-  // If any discover-relevant filter exists (or mode=discover), use discover; else trending.
   const explicitDiscover = searchParams.get('mode') === 'discover';
   const hasDiscoverFilters = [
     'with_genres',
@@ -43,12 +39,10 @@ export async function GET(req: Request) {
     'startYear',
     'endYear',
     'originalLang',
-    // only treat sort_by as filter if caller explicitly set it
     searchParams.has('sort_by') ? 'sort_by' : '',
   ].some((k) => k && searchParams.has(k));
 
   if (!explicitDiscover && !hasDiscoverFilters) {
-    // Trending movies default for browse page
     const url = `${TMDB_BASE}/trending/movie/${['day','week'].includes(timeWindow) ? timeWindow : 'day'}?language=${encodeURIComponent(language)}&page=${encodeURIComponent(page)}`;
     try {
       const res = await fetch(url, { headers, next: { revalidate: 60 } });
@@ -63,7 +57,6 @@ export async function GET(req: Request) {
     }
   }
 
-  // --- Discover path ---
   async function mapGenres(namesCsv: string): Promise<string | undefined> {
     try {
       const { genres } = await fetch(`${TMDB_BASE}/genre/movie/list?language=en`, {

@@ -2,21 +2,12 @@
 
 import { useState } from "react";
 import { Box, Container, Typography, Button } from "@mui/material";
-import useBrowseList from "@/hooks/useBrowseList";
+import { useBrowseMovies } from "@/hooks/useMovies";
 import { MovieCard } from "@/components/cards/movie-card";
-
-interface Movie {
-  id: number
-  title: string
-  poster_path: string | null
-  overview: string
-  release_date: string
-  vote_average: number
-}
 
 export default function BrowseMovies() {
   const [searchQuery, setSearchQuery] = useState("")
-  const { items: movies, loading, error } = useBrowseList<Movie>("movie", searchQuery)
+  const { movies, loading, error } = useBrowseMovies(searchQuery)
 
   return (
     <Box sx={{ p: 4 }} className="min-h-screen bg-linear-to-b from-[#000000] via-[#0f0a0a] to-[#6e0a0a]">
