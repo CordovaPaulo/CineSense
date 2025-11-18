@@ -1,6 +1,7 @@
 "use client"
 
-import { Box, Typography } from "@mui/material"
+import { Box } from "../atoms/Box"
+import { Heading, BodyText } from "../atoms/Text"
 
 interface EmptyStateProps {
   title: string
@@ -20,10 +21,8 @@ export function EmptyState({ title, description }: EmptyStateProps) {
         textAlign: "center",
       }}
     >
-      <Typography variant="h5" sx={{ color: "#f2f2f2", fontWeight: 600 }}>
-        {title}
-      </Typography>
-      {description && <Typography sx={{ color: "#a3a3a3" }}>{description}</Typography>}
+      <Heading variant="h5">{title}</Heading>
+      {description && <BodyText>{description}</BodyText>}
     </Box>
   )
 }
