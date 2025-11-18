@@ -16,6 +16,8 @@
     "@mui/icons-material": "^7.3.4",
     "@mui/material": "^7.3.4",
     "@plotwist_app/tmdb": "^0.2.5",
+    "@tanstack/react-query": "^5.90.7",
+    "@tanstack/react-query-devtools": "^5.90.2",
     "@vercel/analytics": "^1.5.0",
     "axios": "^1.12.2",
     "class-variance-authority": "^0.7.1",

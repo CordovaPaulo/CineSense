@@ -240,7 +240,7 @@ export default function BrowseTVShows() {
 
         {/* 🎥 TV Shows Grid */}
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {tvShows.map((s) => (
+          {shows.map((s) => (
             <ShowCard key={s.id} show={s} />
           ))}
         </div>
