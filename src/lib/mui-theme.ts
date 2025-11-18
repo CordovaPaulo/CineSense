@@ -33,9 +33,9 @@ export const theme = createTheme({
     divider: "#343131",
   },
   typography: {
-    fontFamily: '"Geist", "Geist Fallback", sans-serif',
-    h1: { fontSize: "3rem", fontWeight: 700, letterSpacing: "-0.02em" },
-    h2: { fontSize: "2rem", fontWeight: 700 },
+    fontFamily: "Poppins, sans-serif",
+    h1: { fontSize: "3rem", fontWeight: 800, letterSpacing: "-0.02em" },
+    h2: { fontSize: "1.9rem", fontWeight: 700 },
     h3: { fontSize: "1.5rem", fontWeight: 600 },
     body1: { fontSize: "1rem", lineHeight: 1.6 },
     body2: { fontSize: "0.875rem", lineHeight: 1.5 },
