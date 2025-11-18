@@ -55,9 +55,6 @@ export async function fetchTVShows(options: BrowseOptions = {}, init?: RequestIn
   return response.json();
 }
 
-/**
- * Fetch a single movie by ID
- */
 export async function fetchMovieById(id: number, init?: RequestInit): Promise<Movie> {
   const response = await fetch(`/api/browse/movies/${id}`, { cache: 'no-store', ...init });
   
@@ -68,9 +65,6 @@ export async function fetchMovieById(id: number, init?: RequestInit): Promise<Mo
   return response.json();
 }
 
-/**
- * Fetch a single TV show by ID
- */
 export async function fetchTVShowById(id: number, init?: RequestInit): Promise<TVShow> {
   const response = await fetch(`/api/browse/shows/${id}`, { cache: 'no-store', ...init });
   

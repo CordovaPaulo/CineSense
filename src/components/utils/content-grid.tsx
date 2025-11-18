@@ -1,6 +1,6 @@
 "use client"
 
-import { Grid } from "@mui/material"
+import { Grid } from "../atoms/Grid"
 import type { ReactNode } from "react"
 
 interface ContentGridProps {

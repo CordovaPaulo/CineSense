@@ -1,6 +1,6 @@
 "use client"
 
-import { Paper } from "@mui/material"
+import { ChatContainer as ChatContainerOrganism } from "../organisms/ChatContainer"
 import type { ReactNode } from "react"
 import type { SxProps, Theme } from "@mui/material"
 
@@ -11,10 +11,8 @@ interface ChatContainerProps {
 
 export function ChatContainer({ children, sx }: ChatContainerProps) {
   return (
-    <Paper
+    <ChatContainerOrganism
       sx={{
-        backgroundColor: "#141414",
-        border: "1px solid #333333",
         borderRadius: "0.75rem",
         p: 3,
         display: "flex",
@@ -26,6 +24,6 @@ export function ChatContainer({ children, sx }: ChatContainerProps) {
       }}
     >
       {children}
-    </Paper>
+    </ChatContainerOrganism>
   )
 }

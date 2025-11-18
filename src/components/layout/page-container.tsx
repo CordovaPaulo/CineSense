@@ -1,6 +1,7 @@
 "use client"
 
-import { Container, Box } from "@mui/material"
+import { Box } from "../atoms/Box"
+import { Container } from "../atoms/Container"
 import type { ReactNode } from "react"
 
 interface PageContainerProps {
