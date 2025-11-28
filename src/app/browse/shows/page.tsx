@@ -5,6 +5,8 @@ import { Box, Container, Typography, Button } from "@mui/material";
 import { FiltersPanel, PaginationControls } from "@/components/molecules";
 import { buildShowFilters } from "@/lib/filter-utils";
 import useBrowseList from "@/hooks/useBrowseList";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import useDebounce from "@/hooks/useDebounce";
 import { ShowCard } from "@/components/cards/show-card";
 
 interface TVShow {
@@ -22,10 +24,43 @@ export default function BrowseTVShows() {
   const [genre, setGenre] = useState("");
   const [year, setYear] = useState("");
   const [episodes, setEpisodes] = useState("");
-
   const filters = buildShowFilters(genre, year, episodes);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const debouncedQuery = useDebounce(searchQuery, 500);
 
-  const { items: tvShows, loading, error, totalPages } = useBrowseList<TVShow>("tv", searchQuery, { page, filters });
+  useEffect(() => {
+    const q = searchParams?.get("q") ?? "";
+    const p = parseInt(searchParams?.get("page") ?? "1", 10) || 1;
+    const g = searchParams?.get("genres") ?? "";
+    const y = searchParams?.get("year") ?? "";
+    const e = searchParams?.get("episodes") ?? "";
+    setSearchQuery(q);
+    setPage(p);
+    setGenre(g);
+    setYear(y);
+    setEpisodes(e);
+  }, []);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, genre, year, episodes]);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (debouncedQuery) params.set("q", debouncedQuery);
+    if (page && page > 1) params.set("page", String(page));
+    if (genre) params.set("genres", genre);
+    if (year) params.set("year", String(year));
+    if (episodes) params.set("episodes", episodes);
+
+    const queryString = params.toString();
+    const url = queryString ? `${pathname}?${queryString}` : pathname;
+    router.replace(url);
+  }, [debouncedQuery, page, genre, year, episodes, pathname, router]);
+
+  const { items: tvShows, loading, error, totalPages } = useBrowseList<TVShow>("tv", debouncedQuery, { page, filters });
 
   // Handlers
   const handleGenreChange = (event: any) => setGenre(event.target.value);

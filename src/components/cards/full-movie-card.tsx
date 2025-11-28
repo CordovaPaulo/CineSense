@@ -11,6 +11,7 @@ import {
   Rating,
   Link as MuiLink,
 } from '@mui/material';
+import { CompanyTile } from '@/components/molecules/CompanyTile';
 import LanguageIcon from '@mui/icons-material/Language';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -70,15 +71,16 @@ export const FullMovieCard = memo(function FullMovieCard({
     <Box className={className} sx={{ width: '100%' }}>
       {backdropSrc && (
         <Box
-            sx={{
-              width: '100%',
-              height: { xs: 180, sm: 240 },
-              mb: 3,
-              borderRadius: 2,
-              backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.65)), url(${backdropSrc})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
+          sx={{
+            width: '100%',
+            height: { xs: 180, sm: 240 },
+            mb: 3,
+            borderRadius: 2,
+            backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.65)), url(${backdropSrc})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            boxShadow: '0 8px 30px rgba(0,0,0,0.6)',
+          }}
         />
       )}
 
@@ -87,10 +89,12 @@ export const FullMovieCard = memo(function FullMovieCard({
           display: 'flex',
           flexDirection: { xs: 'column', md: 'row' },
           gap: 3,
-          p: 3,
+          p: { xs: 2, md: 3 },
           borderRadius: 2,
-          bgcolor: 'rgba(255,255,255,0.04)',
-          border: '1px solid rgba(255,255,255,0.10)',
+          bgcolor: 'rgba(255,255,255,0.02)',
+          border: '1px solid rgba(255,255,255,0.06)',
+          backdropFilter: 'saturate(120%) blur(4px)',
+          boxShadow: '0 6px 18px rgba(0,0,0,0.6)',
         }}
       >
         {/* Poster */}
@@ -106,6 +110,7 @@ export const FullMovieCard = memo(function FullMovieCard({
             borderRadius: 2,
             flexShrink: 0,
             backgroundColor: '#111',
+            boxShadow: '0 8px 20px rgba(0,0,0,0.6)',
           }}
         />
 
@@ -144,7 +149,7 @@ export const FullMovieCard = memo(function FullMovieCard({
                     label={g.name}
                     size="small"
                     variant="filled"
-                    sx={{ mb: 1 }}
+                    sx={{ mb: 1, bgcolor: 'rgba(255,255,255,0.04)', color: 'text.primary' }}
                   />
                 ))}
               </Stack>
@@ -217,51 +222,25 @@ export const FullMovieCard = memo(function FullMovieCard({
             <Typography variant="subtitle2" gutterBottom>
               Production Companies
             </Typography>
-            <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 3 }}>
-              {movie.production_companies?.length
-                ? movie.production_companies.map(pc => (
-                    <Stack
-                      key={pc.id}
-                      direction="row"
-                      spacing={1}
-                      alignItems="center"
-                      sx={{
-                        p: 0.75,
-                        pr: 1.25,
-                        borderRadius: 2,
-                        bgcolor: 'rgba(255,255,255,0.06)',
-                        border: '1px solid rgba(255,255,255,0.12)',
-                        mb: 1,
-                      }}
-                    >
-                      {pc.logo_path ? (
-                        <Box
-                          component="img"
-                          src={`${IMAGE_BASE}/w92${pc.logo_path}`}
-                          alt={pc.name}
-                          loading="lazy"
-                          sx={{ width: 40, height: 24, objectFit: 'contain' }}
-                        />
-                      ) : (
-                        <Avatar
-                          sx={{ width: 32, height: 32, fontSize: 14 }}
-                        >
-                          {(pc.name || '?').charAt(0)}
-                        </Avatar>
-                      )}
-                      <Typography variant="body2" sx={{ maxWidth: 140 }} noWrap title={pc.name}>
-                        {pc.name}
-                      </Typography>
-                    </Stack>
-                  ))
-                : <Typography variant="body2">—</Typography>}
-            </Stack>
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 1, mb: 2 }}>
+              {movie.production_companies?.length ? (
+                movie.production_companies.map(pc => (
+                  <CompanyTile
+                    key={pc.id}
+                    name={pc.name}
+                    logoUrl={pc.logo_path ? `${IMAGE_BASE}/w92${pc.logo_path}` : undefined}
+                  />
+                ))
+              ) : (
+                <Typography variant="body2">—</Typography>
+              )}
+            </Box>
 
             {/* Production Countries */}
             <Typography variant="subtitle2" gutterBottom>
               Production Countries
             </Typography>
-            <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 3 }}>
+            <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 2 }}>
               {movie.production_countries?.length
                 ? movie.production_countries.map(c => (
                     <Chip
@@ -275,33 +254,32 @@ export const FullMovieCard = memo(function FullMovieCard({
                 : <Typography variant="body2">—</Typography>}
             </Stack>
 
-            <Divider sx={{ my: 2 }} />
+            <Divider sx={{ my: 1 }} />
 
             {/* External Links */}
-            <Stack direction="row" spacing={1} flexWrap="wrap">
+            <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mt: 1 }}>
               {movie.homepage && (
                 <Button
                   variant="contained"
+                  color="primary"
                   size="small"
                   startIcon={<LanguageIcon />}
                   href={movie.homepage}
                   target="_blank"
                   rel="noopener noreferrer"
+                  sx={{ boxShadow: 'none', minWidth: 100, px: 2 }}
                 >
                   Official Site
                 </Button>
               )}
               {movie.imdb_id && (
-                <MuiLink
-                  href={`https://www.imdb.com/title/${movie.imdb_id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="none"
-                >
+                <MuiLink href={`https://www.imdb.com/title/${movie.imdb_id}`} target="_blank" rel="noopener noreferrer" underline="none">
                   <Button
-                    variant="outlined"
+                    variant="contained"
+                    color="secondary"
                     size="small"
                     endIcon={<OpenInNewIcon />}
+                    sx={{ minWidth: 88, px: 2, boxShadow: 'none' }}
                   >
                     IMDb
                   </Button>

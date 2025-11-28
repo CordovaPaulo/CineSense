@@ -11,6 +11,7 @@ import {
   Link as MuiLink,
   Rating,
 } from '@mui/material';
+import { CompanyTile } from '@/components/molecules/CompanyTile';
 import LanguageIcon from '@mui/icons-material/Language';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -75,6 +76,7 @@ export const FullShowCard = memo(function FullShowCard({
             backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.65)), url(${backdropSrc})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            boxShadow: '0 8px 30px rgba(0,0,0,0.6)',
           }}
         />
       )}
@@ -84,10 +86,12 @@ export const FullShowCard = memo(function FullShowCard({
           display: 'flex',
           flexDirection: { xs: 'column', md: 'row' },
           gap: 3,
-          p: 3,
+          p: { xs: 2, md: 3 },
           borderRadius: 2,
-          bgcolor: 'rgba(255,255,255,0.04)',
-          border: '1px solid rgba(255,255,255,0.10)',
+          bgcolor: 'rgba(255,255,255,0.02)',
+          border: '1px solid rgba(255,255,255,0.06)',
+          backdropFilter: 'saturate(120%) blur(4px)',
+          boxShadow: '0 6px 18px rgba(0,0,0,0.6)',
         }}
       >
         <Box
@@ -102,6 +106,7 @@ export const FullShowCard = memo(function FullShowCard({
             borderRadius: 2,
             flexShrink: 0,
             backgroundColor: '#111',
+            boxShadow: '0 8px 20px rgba(0,0,0,0.6)',
           }}
         />
 
@@ -127,7 +132,7 @@ export const FullShowCard = memo(function FullShowCard({
           {showGenres && genres.length > 0 && (
             <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mt: 1 }}>
               {genres.map((g: { id: number; name: string }) => (
-                <Chip key={g.id} label={g.name} size="small" variant="filled" sx={{ mb: 1 }} />
+                <Chip key={g.id} label={g.name} size="small" variant="filled" sx={{ mb: 1, bgcolor: 'rgba(255,255,255,0.04)', color: 'text.primary' }} />
               ))}
             </Stack>
           )}
@@ -174,7 +179,7 @@ export const FullShowCard = memo(function FullShowCard({
           <Typography variant="subtitle2" gutterBottom>
             Networks
           </Typography>
-          <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 3 }}>
+          <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 2 }}>
             {show.networks?.length ? (
               show.networks.map((n) => (
                 <Stack
@@ -183,12 +188,17 @@ export const FullShowCard = memo(function FullShowCard({
                   spacing={1}
                   alignItems="center"
                   sx={{
-                    p: 0.75,
-                    pr: 1.25,
+                    px: 1,
+                    py: 0.5,
                     borderRadius: 2,
-                    bgcolor: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.12)',
+                    bgcolor: 'rgba(255,255,255,0.04)',
+                    border: '1px solid rgba(255,255,255,0.08)',
                     mb: 1,
+                    minWidth: 140,
+                    maxWidth: 320,
+                    gap: 1,
+                    overflow: 'hidden',
+                    alignSelf: 'flex-start',
                   }}
                 >
                   {n.logo_path ? (
@@ -197,12 +207,12 @@ export const FullShowCard = memo(function FullShowCard({
                       src={`${IMAGE_BASE}/w92${n.logo_path}`}
                       alt={n.name}
                       loading="lazy"
-                      sx={{ width: 40, height: 24, objectFit: 'contain' }}
+                      sx={{ width: 56, height: 28, objectFit: 'contain', flexShrink: 0 }}
                     />
                   ) : (
-                    <Avatar sx={{ width: 32, height: 32, fontSize: 14 }}>{(n.name || '?').charAt(0)}</Avatar>
+                    <Avatar sx={{ width: 36, height: 36, fontSize: 14 }}>{(n.name || '?').charAt(0)}</Avatar>
                   )}
-                  <Typography variant="body2" sx={{ maxWidth: 160 }} noWrap title={n.name}>
+                  <Typography variant="body2" sx={{ maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis' }} noWrap title={n.name}>
                     {n.name}
                   </Typography>
                 </Stack>
@@ -218,70 +228,45 @@ export const FullShowCard = memo(function FullShowCard({
               <Typography variant="subtitle2" gutterBottom>
                 Production Companies
               </Typography>
-              <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 3 }}>
+              <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 1, mb: 2 }}>
                 {show.production_companies.length ? (
                   show.production_companies.map((pc) => (
-                    <Stack
-                      key={pc.id}
-                      direction="row"
-                      spacing={1}
-                      alignItems="center"
-                      sx={{
-                        p: 0.75,
-                        pr: 1.25,
-                        borderRadius: 2,
-                        bgcolor: 'rgba(255,255,255,0.06)',
-                        border: '1px solid rgba(255,255,255,0.12)',
-                        mb: 1,
-                      }}
-                    >
-                      {pc.logo_path ? (
-                        <Box
-                          component="img"
-                          src={`${IMAGE_BASE}/w92${pc.logo_path}`}
-                          alt={pc.name}
-                          loading="lazy"
-                          sx={{ width: 40, height: 24, objectFit: 'contain' }}
-                        />
-                      ) : (
-                        <Avatar sx={{ width: 32, height: 32, fontSize: 14 }}>{(pc.name || '?').charAt(0)}</Avatar>
-                      )}
-                      <Typography variant="body2" sx={{ maxWidth: 160 }} noWrap title={pc.name}>
-                        {pc.name}
-                      </Typography>
-                    </Stack>
+                    <CompanyTile key={pc.id} name={pc.name} logoUrl={pc.logo_path ? `${IMAGE_BASE}/w92${pc.logo_path}` : undefined} />
                   ))
                 ) : (
                   <Typography variant="body2">—</Typography>
                 )}
-              </Stack>
+              </Box>
             </>
           )}
 
-          <Divider sx={{ my: 2 }} />
+          <Divider sx={{ my: 1 }} />
 
           {/* External Links */}
-          <Stack direction="row" spacing={1} flexWrap="wrap">
+          <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mt: 1 }}>
             {show.homepage && (
               <Button
                 variant="contained"
+                color="primary"
                 size="small"
                 startIcon={<LanguageIcon />}
                 href={show.homepage}
                 target="_blank"
                 rel="noopener noreferrer"
+                sx={{ boxShadow: 'none', minWidth: 100, px: 2 }}
               >
                 Official Site
               </Button>
             )}
             {show.id && (
-              <MuiLink
-                href={`https://www.themoviedb.org/tv/${show.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                underline="none"
-              >
-                <Button variant="outlined" size="small" endIcon={<OpenInNewIcon />}>
+              <MuiLink href={`https://www.themoviedb.org/tv/${show.id}`} target="_blank" rel="noopener noreferrer" underline="none">
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  size="small"
+                  endIcon={<OpenInNewIcon />}
+                  sx={{ minWidth: 88, px: 2, boxShadow: 'none' }}
+                >
                   TMDB
                 </Button>
               </MuiLink>

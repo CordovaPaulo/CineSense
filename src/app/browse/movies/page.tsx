@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import useDebounce from "@/hooks/useDebounce";
 import { Box, Container, Typography, Button } from "@mui/material";
 import { FiltersPanel, PaginationControls } from "@/components/molecules";
 import { buildMovieFilters } from "@/lib/filter-utils";
@@ -43,23 +45,50 @@ const fadeSlideUp2 = keyframes`
 export default function BrowseMovies() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState<number>(1);
-
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const debouncedQuery = useDebounce(searchQuery, 500);
   const [genre, setGenre] = useState("");
   const [year, setYear] = useState("");
   const [duration, setDuration] = useState("");
-
   const filters = buildMovieFilters(genre, year, duration);
 
-  const { items: movies, loading, error, totalPages } = useBrowseList<Movie>("movie", searchQuery, { page, filters });
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, genre, year, duration]);
+
+  const { items: movies, loading, error, totalPages } = useBrowseList<Movie>("movie", debouncedQuery, { page, filters });
 
   const handleGenreChange = (event: any) => setGenre(event.target.value);
   const handleYearChange = (event: any) => setYear(event.target.value);
   const handleDurationChange = (event: any) => setDuration(event.target.value);
 
-  // Reset to first page when filters or query change
   useEffect(() => {
-    setPage(1);
-  }, [searchQuery, genre, year, duration]);
+    const q = searchParams?.get("q") ?? "";
+    const p = parseInt(searchParams?.get("page") ?? "1", 10) || 1;
+    const g = searchParams?.get("genres") ?? "";
+    const y = searchParams?.get("year") ?? "";
+    const d = searchParams?.get("duration") ?? "";
+    setSearchQuery(q);
+    setPage(p);
+    setGenre(g);
+    setYear(y);
+    setDuration(d);
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (debouncedQuery) params.set("q", debouncedQuery);
+    if (page && page > 1) params.set("page", String(page));
+    if (genre) params.set("genres", genre);
+    if (year) params.set("year", String(year));
+    if (duration) params.set("duration", duration);
+
+    const queryString = params.toString();
+    const url = queryString ? `${pathname}?${queryString}` : pathname;
+    router.replace(url);
+  }, [debouncedQuery, page, genre, year, duration, pathname, router]);
 
   const genres = [
     "Action",

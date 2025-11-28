@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import fetchCache from '@/lib/fetch-cache';
 
 type MediaType = "movie" | "tv";
 
@@ -46,23 +47,32 @@ export default function useBrowseList<T = any>(
       });
     }
 
-    const url =
-      media === "movie"
-        ? `/api/browse/movies?${params.toString()}`
-        : `/api/browse/shows?${params.toString()}`;
+    const url = media === "movie" ? `/api/browse/movies?${params.toString()}` : `/api/browse/shows?${params.toString()}`;
 
-    fetch(url)
-      .then(async (r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        const data = await r.json();
-        // TMDB shape has data.results; fall back to array if endpoint returns a list directly
+    // Try to serve from cache first for instant UI
+    const cached = fetchCache.getCached(url);
+    if (cached && !cancelled) {
+      const data = cached;
+      const arr = Array.isArray(data) ? data : Array.isArray((data as any).results) ? (data as any).results : [];
+      setItems(arr as T[]);
+      setTotalPages((data as any).total_pages ?? undefined);
+      setTotalResults((data as any).total_results ?? undefined);
+      // continue to revalidate in background
+      fetchCache.prefetch(url);
+      setLoading(false);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    // No cache: fetch and cache the result
+    fetchCache.fetchAndCache(url)
+      .then((data) => {
+        if (cancelled) return;
         const arr = Array.isArray(data) ? data : Array.isArray((data as any).results) ? (data as any).results : [];
-        if (!cancelled) {
-          setItems(arr as T[]);
-          setTotalPages((data as any).total_pages ?? undefined);
-          setTotalResults((data as any).total_results ?? undefined);
-        }
-        return arr as T[];
+        setItems(arr as T[]);
+        setTotalPages((data as any).total_pages ?? undefined);
+        setTotalResults((data as any).total_results ?? undefined);
       })
       .catch((e: any) => {
         if (!cancelled) setError(String(e?.message ?? e));
