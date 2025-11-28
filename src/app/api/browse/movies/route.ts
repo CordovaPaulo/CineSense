@@ -100,6 +100,12 @@ export async function GET(req: Request) {
   if (yrStart) params.set('primary_release_date.gte', `${yrStart}-01-01`);
   if (yrEnd) params.set('primary_release_date.lte', `${yrEnd}-12-31`);
 
+  // Optional runtime filters passed from client (runtime in minutes)
+  const runtimeGte = searchParams.get('runtime_gte');
+  const runtimeLte = searchParams.get('runtime_lte');
+  if (runtimeGte) params.set('with_runtime.gte', runtimeGte);
+  if (runtimeLte) params.set('with_runtime.lte', runtimeLte);
+
   let genreIds = withGenresIds || undefined;
   if (!genreIds && genresByName) genreIds = await mapGenres(genresByName);
   if (genreIds) params.set('with_genres', genreIds);

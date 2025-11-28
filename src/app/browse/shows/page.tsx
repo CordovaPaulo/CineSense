@@ -1,16 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import {
-  Box,
-  Container,
-  Typography,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import { useState, useEffect } from "react";
+import { Box, Container, Typography, Button } from "@mui/material";
+import { FiltersPanel, PaginationControls } from "@/components/molecules";
+import { buildShowFilters } from "@/lib/filter-utils";
 import useBrowseList from "@/hooks/useBrowseList";
 import { ShowCard } from "@/components/cards/show-card";
 
@@ -25,14 +18,14 @@ interface TVShow {
 
 export default function BrowseTVShows() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState<number>(1);
   const [genre, setGenre] = useState("");
   const [year, setYear] = useState("");
   const [episodes, setEpisodes] = useState("");
 
-  const { items: tvShows, loading, error } = useBrowseList<TVShow>(
-    "tv",
-    searchQuery
-  );
+  const filters = buildShowFilters(genre, year, episodes);
+
+  const { items: tvShows, loading, error, totalPages } = useBrowseList<TVShow>("tv", searchQuery, { page, filters });
 
   // Handlers
   const handleGenreChange = (event: any) => setGenre(event.target.value);
@@ -66,10 +59,14 @@ export default function BrowseTVShows() {
   // 📅 Year dropdown (descending 2025 → 2000)
   const years = Array.from({ length: 26 }, (_, i) => 2025 - i);
 
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, genre, year, episodes]);
+
   return (
     <Box
       sx={{ p: 4 }}
-      className="min-h-screen bg-gradient-to-b from-[#000000] via-[#0f0a0a] to-[#6e0a0a]"
+      className="min-h-screen bg-linear-to-b from-[#000000] via-[#0f0a0a] to-[#6e0a0a]"
     >
       <Container maxWidth="lg">
         {/* 🔹 Header with Dropdowns + Button */}
@@ -79,128 +76,18 @@ export default function BrowseTVShows() {
           </Typography>
 
           <Box className="flex flex-wrap items-center gap-4">
-            {/* 🎞️ Genre Dropdown */}
-            <FormControl
-              size="small"
-              sx={{
-                minWidth: 160,
-                "&:hover": {
-                  filter: "drop-shadow(0 0 8px rgba(255, 82, 82, 0.8))",
-                },
-              }}
-              color="secondary"
-            >
-              <InputLabel id="genre-select-label" color="secondary">
-                Genre
-              </InputLabel>
-              <Select
-                labelId="genre-select-label"
-                id="genre-select"
-                value={genre}
-                label="Genre"
-                onChange={handleGenreChange}
-                sx={{
-                  color: "secondary.main",
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "secondary.main",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "secondary.main",
-                  },
-                }}
-              >
-                <MenuItem value="">
-                  <em>Select Genre</em>
-                </MenuItem>
-                {genres.map((g) => (
-                  <MenuItem key={g} value={g}>
-                    {g}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            {/* 📅 Year Dropdown */}
-            <FormControl
-              size="small"
-              sx={{
-                minWidth: 140,
-                "&:hover": {
-                  filter: "drop-shadow(0 0 8px rgba(255, 82, 82, 0.8))",
-                },
-              }}
-              color="secondary"
-            >
-              <InputLabel id="year-select-label" color="secondary">
-                Year
-              </InputLabel>
-              <Select
-                labelId="year-select-label"
-                id="year-select"
-                value={year}
-                label="Year"
-                onChange={handleYearChange}
-                sx={{
-                  color: "secondary.main",
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "secondary.main",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "secondary.main",
-                  },
-                }}
-              >
-                <MenuItem value="">
-                  <em>Select Year</em>
-                </MenuItem>
-                {years.map((y) => (
-                  <MenuItem key={y} value={y}>
-                    {y}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            {/* 📺 Number of Episodes Dropdown */}
-            <FormControl
-              size="small"
-              sx={{
-                minWidth: 180,
-                "&:hover": {
-                  filter: "drop-shadow(0 0 8px rgba(255, 82, 82, 0.8))",
-                },
-              }}
-              color="secondary"
-            >
-              <InputLabel id="episodes-select-label" color="secondary">
-                Episodes
-              </InputLabel>
-              <Select
-                labelId="episodes-select-label"
-                id="episodes-select"
-                value={episodes}
-                label="Episodes"
-                onChange={handleEpisodesChange}
-                sx={{
-                  color: "secondary.main",
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "secondary.main",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "secondary.main",
-                  },
-                }}
-              >
-                <MenuItem value="">
-                  <em>Select Range</em>
-                </MenuItem>
-                {episodeRanges.map((range) => (
-                  <MenuItem key={range} value={range}>
-                    {range}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <FiltersPanel
+              genre={genre}
+              year={year}
+              third={episodes}
+              onGenreChange={handleGenreChange}
+              onYearChange={handleYearChange}
+              onThirdChange={handleEpisodesChange}
+              genres={genres}
+              years={years}
+              thirdOptions={episodeRanges}
+              thirdLabel="Episodes"
+            />
 
             {/* 🎬 Browse Movies Button */}
             <Button
@@ -240,10 +127,18 @@ export default function BrowseTVShows() {
 
         {/* 🎥 TV Shows Grid */}
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {shows.map((s) => (
+          {tvShows.map((s) => (
             <ShowCard key={s.id} show={s} />
           ))}
         </div>
+
+        <PaginationControls
+          page={page}
+          totalPages={totalPages}
+          loading={loading}
+          onPrev={() => setPage((p) => Math.max(1, p - 1))}
+          onNext={() => setPage((p) => (totalPages ? Math.min(totalPages, p + 1) : p + 1))}
+        />
       </Container>
     </Box>
   );

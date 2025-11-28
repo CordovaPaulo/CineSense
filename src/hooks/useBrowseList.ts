@@ -6,24 +6,45 @@ type HookState<T> = {
   items: T[];
   loading: boolean;
   error: string | null;
+  page: number;
+  totalPages?: number;
+  totalResults?: number;
 };
 
-export default function useBrowseList<T = any>(media: MediaType, query = ""): HookState<T> {
+type Options = {
+  page?: number;
+  filters?: Record<string, string>;
+};
+
+export default function useBrowseList<T = any>(
+  media: MediaType,
+  query = "",
+  options: Options = {}
+): HookState<T> {
   const [items, setItems] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(options.page ?? 1);
+  const [totalPages, setTotalPages] = useState<number | undefined>(undefined);
+  const [totalResults, setTotalResults] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     setError(null);
 
-    // For now we use trending for browse; your route switches to discover when filters exist.
     const params = new URLSearchParams();
-    params.set("page", "1");
+    params.set("page", String(options.page ?? page ?? 1));
     params.set("language", "en-US");
-    // Optional: keep this; the route will ignore it unless you implement search
     if (query.trim()) params.set("q", query.trim());
+
+    // If filters are provided, pass them through; also signal discover mode
+    if (options.filters && Object.keys(options.filters).length > 0) {
+      params.set("mode", "discover");
+      Object.entries(options.filters).forEach(([k, v]) => {
+        if (v !== undefined && v !== "") params.set(k, v);
+      });
+    }
 
     const url =
       media === "movie"
@@ -35,11 +56,13 @@ export default function useBrowseList<T = any>(media: MediaType, query = ""): Ho
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         const data = await r.json();
         // TMDB shape has data.results; fall back to array if endpoint returns a list directly
-        const arr = Array.isArray(data) ? data : Array.isArray(data.results) ? data.results : [];
+        const arr = Array.isArray(data) ? data : Array.isArray((data as any).results) ? (data as any).results : [];
+        if (!cancelled) {
+          setItems(arr as T[]);
+          setTotalPages((data as any).total_pages ?? undefined);
+          setTotalResults((data as any).total_results ?? undefined);
+        }
         return arr as T[];
-      })
-      .then((arr) => {
-        if (!cancelled) setItems(arr);
       })
       .catch((e: any) => {
         if (!cancelled) setError(String(e?.message ?? e));
@@ -51,7 +74,13 @@ export default function useBrowseList<T = any>(media: MediaType, query = ""): Ho
     return () => {
       cancelled = true;
     };
-  }, [media, query]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [media, query, options.page, JSON.stringify(options.filters ?? {})]);
 
-  return { items, loading, error };
+  // Keep returned page in sync with options.page when provided
+  useEffect(() => {
+    if (options.page && options.page !== page) setPage(options.page);
+  }, [options.page]);
+
+  return { items, loading, error, page, totalPages, totalResults };
 }

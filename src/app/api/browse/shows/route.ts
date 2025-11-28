@@ -89,6 +89,12 @@ export async function GET(req: Request) {
     if (yrStart) params.set('first_air_date.gte', `${yrStart}-01-01`);
     if (yrEnd) params.set('first_air_date.lte', `${yrEnd}-12-31`);
 
+    // Optional episodes filters (client may pass episodes_gte/episodes_lte)
+    const episodesGte = searchParams.get('episodes_gte');
+    const episodesLte = searchParams.get('episodes_lte');
+    if (episodesGte) params.set('with_number_of_episodes.gte', episodesGte);
+    if (episodesLte) params.set('with_number_of_episodes.lte', episodesLte);
+
     let genreIds = withGenresIds || undefined;
     if (!genreIds && genresByName) genreIds = await mapGenres(genresByName);
     if (genreIds) params.set('with_genres', genreIds);
