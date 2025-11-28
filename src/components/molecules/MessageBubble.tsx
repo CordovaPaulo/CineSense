@@ -23,15 +23,26 @@ export function MessageBubble({ role, content, timestamp }: MessageBubbleProps) 
     >
       <Paper
         sx={{
-          maxWidth: "70%",
-          backgroundColor: isUser ? "#ffbd4c" : "#1e1e1e",
-          color: isUser ? "#f2f2f2" : "#f2f2f2",
-          p: 2,
+          maxWidth: "78%",
+          backgroundColor: isUser ? "#ffbd4c" : "#121212",
+          color: isUser ? "#0b0b0b" : "#f2f2f2",
+          p: { xs: 1.25, sm: 2 },
           borderRadius: "0.75rem",
-          border: isUser ? "none" : "1px solid #333333",
+          border: isUser ? "none" : "1px solid #2b2b2b",
+          boxShadow: isUser ? '0 4px 18px rgba(0,0,0,0.12)' : '0 6px 18px rgba(0,0,0,0.25)',
         }}
       >
-        <Text variant="body1" sx={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+        <Text
+          variant="body1"
+          sx={{
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-word",
+            lineHeight: 1.6,
+            fontSize: { xs: '0.95rem', sm: '1rem' },
+            fontWeight: 500,
+            color: isUser ? '#0b0b0b' : undefined,
+          }}
+        >
           {content}
         </Text>
         {timestamp && (
@@ -40,7 +51,7 @@ export function MessageBubble({ role, content, timestamp }: MessageBubbleProps) 
             sx={{
               display: "block",
               mt: 1,
-              color: isUser ? "rgba(242, 242, 242, 0.7)" : "#a3a3a3",
+              color: isUser ? "rgba(11,11,11,0.6)" : "#a3a3a3",
             }}
           >
             {timestamp.toLocaleTimeString()}

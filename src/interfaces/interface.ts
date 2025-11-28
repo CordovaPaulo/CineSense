@@ -43,3 +43,16 @@ export interface BrowseOptions {
   actor?: string;
   includeAdult?: boolean;
 }
+
+// Chat / assistant interfaces
+export interface ChatRecommendation {
+  type: 'movie' | 'tv';
+  reason?: string;
+  item: any; // Ideally a Movie or TVShow detail object when available
+}
+
+export interface ChatResponse {
+  greeting?: string;
+  recommendations?: ChatRecommendation[];
+  reply?: string;
+}

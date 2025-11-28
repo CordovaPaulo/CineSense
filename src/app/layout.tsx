@@ -6,6 +6,7 @@ import { MuiThemeProvider } from "../lib/mui-theme-provider"
 import { Navbar } from "../components/layout/navbar"
 import Footer from "../components/layout/footer"
 import { QueryProvider } from "@/lib/query-client-provider";
+import Prefetcher from '@/components/Prefetcher';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,7 @@ export default function RootLayout({
         <QueryProvider>
           <MuiThemeProvider>
             <Navbar />
+            <Prefetcher />
             {children}
           </MuiThemeProvider>
           <Analytics />

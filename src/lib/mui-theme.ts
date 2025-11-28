@@ -43,8 +43,16 @@ export const theme = createTheme({
   components: {
     MuiButton: {
       styleOverrides: {
-        root: { textTransform: "none", fontWeight: 500, borderRadius: "0.5rem" },
-        contained: { boxShadow: "none", "&:hover": { boxShadow: "none" } },
+        root: {
+          textTransform: "none",
+          fontWeight: 600,
+          borderRadius: "0.5rem",
+          transition: 'transform 160ms ease, box-shadow 160ms ease, background-color 120ms ease',
+        },
+        contained: {
+          boxShadow: "none",
+          '&:hover': { boxShadow: 'none', transform: 'translateY(-1px)' },
+        },
       },
     },
     MuiCard: {
