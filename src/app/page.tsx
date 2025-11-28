@@ -167,7 +167,7 @@ export default function Home() {
                   fontWeight: "800",
                   pb:"70px",
                   textShadow: "2px 2px 11.3px rgba(255, 189, 76, 0.6)",
-                  pb: "20px"
+                  // pb: "20px"
                 }}>Browse Movies</Typography>
                 <p className="text-main-text-color mb-20">
                   Explore thousands of movies with ratings, reviews, and detailed information.
@@ -207,7 +207,7 @@ export default function Home() {
                 p: 8, // padding: theme.spacing(8 / 4) = 2rem, same as p-8
                 height: "100%", // h-full
                 display: "flex",
-                width: "430px",
+                // width: "430px",
                 flexDirection: "column",
                 justifyContent: "center",
                 textAlign: "center",
@@ -223,7 +223,7 @@ export default function Home() {
                   fontWeight: "800",
                   pb:"70px",
                   textShadow: "2px 2px 11.3px rgba(255, 189, 76, 0.6)",
-                  pb: "20px"
+                  // pb: "20px"s
                 }}>Browse TV Shows</Typography>
                 <p className="text-main-text-color mb-20">
                   Discover trending series and binge-worthy shows from around the world.
@@ -261,7 +261,7 @@ export default function Home() {
                 p: 8, // padding: theme.spacing(8 / 4) = 2rem, same as p-8
                 height: "100%", // h-full
                 display: "flex",
-                width: "430px",
+                // width: "430px",
                 flexDirection: "column",
                 justifyContent: "center",
                 textAlign: "center",
@@ -279,7 +279,7 @@ export default function Home() {
                   fontWeight: "800",
                   pb:"70px",
                   textShadow: "2px 2px 11.3px rgba(255, 189, 76, 0.6)",
-                  pb: "20px"
+                  // pb: "20px"
                 }}>Chat with AI</Typography>
                 <p className="text-main-text-color mb-20">
                   Get personalized recommendations and assistance from our AI chatbot.
@@ -360,7 +360,7 @@ export default function Home() {
                 color: "var(--main-text-color)", // text-main-text-color
                 mb: 4, // mb-5 ≈ 20px
                 transition: "color 0.2s ease-out",
-                color: "#FFB22C",
+                // color: "#FFB22C",
                 fontWeight: "800",
                 textShadow: "2px 2px 11.3px rgba(255, 189, 76, 0.6)"
                   }}

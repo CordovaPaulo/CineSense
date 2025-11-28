@@ -5,7 +5,7 @@ const genAI = new GoogleGenerativeAI(apiKey);
 
 function extractJson(text: string): any {
   const fenced = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
-  let candidate = (fenced ? fenced[1] : text).trim();
+  const candidate = (fenced ? fenced[1] : text).trim();
 
   const grabBalanced = (s: string, open: "{" | "[", close: "}" | "]") => {
     const start = s.indexOf(open);
@@ -21,7 +21,7 @@ function extractJson(text: string): any {
     return null;
   };
 
-  let jsonish =
+  const jsonish =
     grabBalanced(candidate, "{", "}") ??
     grabBalanced(candidate, "[", "]") ??
     candidate;
