@@ -1,16 +1,9 @@
 'use client';
 
-import { useState } from "react";
-import {
-  Box,
-  Container,
-  Typography,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import { useState, useEffect } from "react";
+import { Box, Container, Typography, Button } from "@mui/material";
+import { FiltersPanel, PaginationControls } from "@/components/molecules";
+import { buildMovieFilters } from "@/lib/filter-utils";
 import useBrowseList from "@/hooks/useBrowseList";
 import { keyframes } from "@mui/system"; // <-- import keyframes her"
 import { MovieCard } from "@/components/cards/movie-card";
@@ -49,15 +42,24 @@ const fadeSlideUp2 = keyframes`
 
 export default function BrowseMovies() {
   const [searchQuery, setSearchQuery] = useState("");
-  const { items: movies, loading, error } = useBrowseList<Movie>("movie", searchQuery);
+  const [page, setPage] = useState<number>(1);
 
   const [genre, setGenre] = useState("");
   const [year, setYear] = useState("");
   const [duration, setDuration] = useState("");
 
+  const filters = buildMovieFilters(genre, year, duration);
+
+  const { items: movies, loading, error, totalPages } = useBrowseList<Movie>("movie", searchQuery, { page, filters });
+
   const handleGenreChange = (event: any) => setGenre(event.target.value);
   const handleYearChange = (event: any) => setYear(event.target.value);
   const handleDurationChange = (event: any) => setDuration(event.target.value);
+
+  // Reset to first page when filters or query change
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, genre, year, duration]);
 
   const genres = [
     "Action",
@@ -85,7 +87,7 @@ export default function BrowseMovies() {
 
   return (
     <Box
-      className="min-h-[70vh] w-full flex items-center justify-center rounded-2xl p-4 text-white bg-gradient-to-b from-black to-[#B85252]"
+      className="min-h-[70vh] w-full flex items-center justify-center rounded-2xl p-4 text-white bg-linear-to-b from-black to-[#B85252]"
       sx={{ p: 4 }}
       style={{
         backgroundSize: "200% 200%",
@@ -111,128 +113,18 @@ export default function BrowseMovies() {
           </Typography>
 
           <Box className="flex flex-wrap items-center gap-4">
-            {/* 🎞️ Genre Dropdown */}
-            <FormControl
-              size="small"
-              sx={{
-                minWidth: 160,
-                "&:hover": {
-                  filter: "drop-shadow(0 0 8px rgba(255, 82, 82, 0.8))",
-                },
-              }}
-              color="secondary"
-            >
-              <InputLabel id="movie-genre-select-label" color="secondary">
-                Genre
-              </InputLabel>
-              <Select
-                labelId="movie-genre-select-label"
-                id="movie-genre-select"
-                value={genre}
-                label="Genre"
-                onChange={handleGenreChange}
-                sx={{
-                  color: "secondary.main",
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "secondary.main",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "secondary.main",
-                  },
-                }}
-              >
-                <MenuItem value="">
-                  <em>Select Genre</em>
-                </MenuItem>
-                {genres.map((g) => (
-                  <MenuItem key={g} value={g}>
-                    {g}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            {/* 📅 Year Dropdown */}
-            <FormControl
-              size="small"
-              sx={{
-                minWidth: 120,
-                "&:hover": {
-                  filter: "drop-shadow(0 0 8px rgba(255, 82, 82, 0.8))",
-                },
-              }}
-              color="secondary"
-            >
-              <InputLabel id="year-select-label" color="secondary">
-                Year
-              </InputLabel>
-              <Select
-                labelId="year-select-label"
-                id="year-select"
-                value={year}
-                label="Year"
-                onChange={handleYearChange}
-                sx={{
-                  color: "secondary.main",
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "secondary.main",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "secondary.main",
-                  },
-                }}
-              >
-                <MenuItem value="">
-                  <em>Select Year</em>
-                </MenuItem>
-                {years.map((y) => (
-                  <MenuItem key={y} value={y}>
-                    {y}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            {/* ⏱️ Duration Dropdown */}
-            <FormControl
-              size="small"
-              sx={{
-                minWidth: 160,
-                "&:hover": {
-                  filter: "drop-shadow(0 0 8px rgba(255, 82, 82, 0.8))",
-                },
-              }}
-              color="secondary"
-            >
-              <InputLabel id="duration-select-label" color="secondary">
-                Duration
-              </InputLabel>
-              <Select
-                labelId="duration-select-label"
-                id="duration-select"
-                value={duration}
-                label="Duration"
-                onChange={handleDurationChange}
-                sx={{
-                  color: "secondary.main",
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "secondary.main",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "secondary.main",
-                  },
-                }}
-              >
-                <MenuItem value="">
-                  <em>Select Duration</em>
-                </MenuItem>
-                {durations.map((d) => (
-                  <MenuItem key={d} value={d}>
-                    {d}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <FiltersPanel
+              genre={genre}
+              year={year}
+              third={duration}
+              onGenreChange={handleGenreChange}
+              onYearChange={handleYearChange}
+              onThirdChange={handleDurationChange}
+              genres={genres}
+              years={years}
+              thirdOptions={durations}
+              thirdLabel="Duration"
+            />
 
             {/* 🎥 Browse TV Shows Button */}
             <Button
@@ -278,10 +170,17 @@ export default function BrowseMovies() {
         {/* 🎬 Movie Grid */}
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {movies.map((m) => (
-          
             <MovieCard key={m.id} movie={m} />
           ))}
         </div>
+
+        <PaginationControls
+          page={page}
+          totalPages={totalPages}
+          loading={loading}
+          onPrev={() => setPage((p) => Math.max(1, p - 1))}
+          onNext={() => setPage((p) => (totalPages ? Math.min(totalPages, p + 1) : p + 1))}
+        />
       </Container>
     </Box>
   );

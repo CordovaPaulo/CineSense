@@ -141,7 +141,7 @@ export default function Home() {
         <Grid container spacing={3} sx={{ mt: 10, justifyContent: 'space-between', alignItems: "center",
           ml: -5, flexDirection: "row", mb:20
         }}>
-          <Grid xs={12} md="auto" sx={{ width: '100%', maxWidth: 380, height: 300,}}>
+          <Grid sx={{ width: '100%', maxWidth: 380, height: 300,}}>
             
             <Link href="/browse/movies" className="group h-full block">
             <ScrollAppear>
@@ -197,7 +197,7 @@ export default function Home() {
             </Link>
           </Grid>
 
-          <Grid xs={12} md="auto" sx={{ width: '100%', maxWidth: 380, height: 300}}>
+          <Grid sx={{ width: '100%', maxWidth: 380, height: 300}}>
             <Link href="/browse/movies" className="group h-full block">
             <ScrollAppear>
               <Box sx={{
@@ -251,7 +251,7 @@ export default function Home() {
             </Link>
           </Grid>
 
-          <Grid xs={12} md="auto" sx={{ width: '100%', maxWidth: 380, height: 300}}>
+          <Grid sx={{ width: '100%', maxWidth: 380, height: 300}}>
             <Link href="/browse/movies" className="group h-full block">
             <ScrollAppear>
               <Box sx={{
@@ -319,7 +319,7 @@ export default function Home() {
           textShadow: "2px 2px 11.3px rgba(255, 255, 255, 0.6)"
         }}>Why CineSense?</Typography>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
+              {[ 
                 { title: "AI-Driven", desc: "Get personalized suggestions based on your viewing preferences." },
                 { title: "Vast Library", desc: "Explore a vast library of movies and TV shows from around the world." },
                 { title: "Real Ratings", desc: "Access real-time ratings and reviews from trusted sources." },
@@ -327,9 +327,8 @@ export default function Home() {
                 { title: "Personalized", desc: "Receive tailored suggestions based on your emotions and preferences." },
                 { title: "User-Friendly", desc: "Enjoy a smooth, simple, and intuitive viewing experience." },
               ].map((feature, i) => (
-            <ScrollAppear>
+            <ScrollAppear key={feature.title}>
             <Box
-              key={i}
               role="article"
               aria-label={feature.title}
               sx={{
