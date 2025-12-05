@@ -20,6 +20,11 @@ export interface TVShow {
   genre_ids: number[];
 }
 
+export interface Genre {
+  id: number;
+  name: string;
+}
+
 export interface TMDBResponse<T> {
   page: number;
   results: T[];

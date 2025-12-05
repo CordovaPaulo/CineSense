@@ -48,7 +48,6 @@ export function useMovies(options: BrowseOptions = {}): UseMoviesResult {
     // so we need to cast the data structure to access pages safely.
     // When data is undefined we return empty aggregate.
     // Type narrowing here keeps Movie[] typed.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const infinite = data as any;
     if (!infinite || !infinite.pages) {
       return { movies: [] as Movie[], page: 1, totalPages: 0, totalResults: 0 };

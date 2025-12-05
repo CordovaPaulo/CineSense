@@ -4,9 +4,8 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { MuiThemeProvider } from "../lib/mui-theme-provider"
 import { Navbar } from "../components/layout/navbar"
-import Footer from "../components/layout/footer"
 import { QueryProvider } from "@/lib/query-client-provider";
-import Prefetcher from '@/components/Prefetcher';
+import PrefetcherLazy from '@/components/PrefetcherLazy';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,6 +20,18 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Cinesense",
   description: "Your AI-powered movie recommendation app",
+  authors: [{ name: 'CineSense' }],
+  openGraph: {
+    title: 'Cinesense',
+    description: 'AI-powered movie and TV recommendations',
+    siteName: 'Cinesense',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Cinesense',
+    description: 'AI-powered movie and TV recommendations',
+  },
 };
 
 export default function RootLayout({
@@ -39,7 +50,7 @@ export default function RootLayout({
         <QueryProvider>
           <MuiThemeProvider>
             <Navbar />
-            <Prefetcher />
+            <PrefetcherLazy />
             {children}
           </MuiThemeProvider>
           <Analytics />
