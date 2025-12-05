@@ -1,9 +1,7 @@
 "use client"
 
 import { Box, Typography } from "@mui/material"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { keyframes } from "@mui/system"; // <-- import keyframes her"
+import { keyframes } from "@mui/system";
 
 
 const fadeSlideUp = keyframes`

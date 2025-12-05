@@ -77,7 +77,7 @@ export function ShowCard({
       const d = await fetchTVShowById(id);
       setDetails(d);
       setOpen(true);
-    } catch (e) {
+    } catch (_e) {
       setError('Failed to load show details.');
       setOpen(true);
     } finally {

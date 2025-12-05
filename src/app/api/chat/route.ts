@@ -93,7 +93,7 @@ export async function POST(req: Request) {
             continue;
           }
         }
-      } catch (e) {
+      } catch (_e) {
         // fall through to push minimal info
       }
 

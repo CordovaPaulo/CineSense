@@ -5,7 +5,6 @@ import {
   Typography,
   Chip,
   Stack,
-  Avatar,
   Divider,
   Button,
   Rating,

@@ -8,15 +8,7 @@ import useBrowseList from "@/hooks/useBrowseList";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import useDebounce from "@/hooks/useDebounce";
 import { ShowCard } from "@/components/cards/show-card";
-
-interface TVShow {
-  id: number;
-  name: string;
-  poster_path: string | null;
-  overview: string;
-  first_air_date: string;
-  vote_average: number;
-}
+import type { TVShow } from '@/interfaces/interface';
 
 export default function ClientBrowseShows() {
   const [searchQuery, setSearchQuery] = useState("");
