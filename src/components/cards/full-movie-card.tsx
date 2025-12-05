@@ -17,8 +17,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import type { Movie } from '@/interfaces/interface';
-import { formatRuntime } from '@/components/utils/runtime-formatter';
-import { formatCurrency } from '@/components/utils/currency-formatter';
+import { formatRuntime, formatCurrency } from '@/lib/format-utils';
 
 // Base TMDB image URL (poster/backdrop sizes can be adjusted)
 const IMAGE_BASE = process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL ?? 'https://image.tmdb.org/t/p';
@@ -174,7 +173,7 @@ export const FullMovieCard = memo(function FullMovieCard({
                   Release: {movie.release_date || '—'}
                 </Typography>
                 <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                  <AccessTimeIcon fontSize="inherit" /> Runtime: {formatRuntime(movie.runtime)}
+                  <AccessTimeIcon fontSize="inherit" /> Runtime: {movie.runtime ? formatRuntime(movie.runtime) : '—'}
                 </Typography>
                 <Typography variant="body2">
                   Original Language: {movie.original_language || '—'}
