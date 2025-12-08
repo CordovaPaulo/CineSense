@@ -2,12 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "../atoms/Button"
-
-interface NavLinkProps {
-  href: string
-  isActive: boolean
-  children: React.ReactNode
-}
+import type { NavLinkProps } from '@/interfaces/interface'
 
 export function NavLink({ href, isActive, children }: NavLinkProps) {
   return (

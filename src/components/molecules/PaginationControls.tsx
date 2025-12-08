@@ -1,15 +1,8 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
+import type { PaginationControlsProps } from '@/interfaces/interface'
 
-interface Props {
-  page: number;
-  totalPages?: number;
-  loading?: boolean;
-  onPrev: () => void;
-  onNext: () => void;
-}
-
-export const PaginationControls: React.FC<Props> = ({ page, totalPages, loading, onPrev, onNext }) => {
+export const PaginationControls: React.FC<PaginationControlsProps> = ({ page, totalPages, loading, onPrev, onNext }) => {
   return (
     <Box className="mt-6 flex items-center justify-center gap-4">
       <Button variant="outlined" onClick={onPrev} disabled={page <= 1 || loading}

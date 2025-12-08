@@ -1,12 +1,4 @@
-export interface MockShow {
-  id: number
-  title: string
-  poster_path: string | null
-  overview: string
-  release_year: string
-  vote_average: number
-}
-
+import type { MockShow } from '@/interfaces/interface';
 export const MOCK_SHOWS: MockShow[] = [
   {
     id: 101,

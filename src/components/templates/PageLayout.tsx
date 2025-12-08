@@ -2,11 +2,7 @@
 
 import { Container } from "../atoms/Container"
 import { Box } from "../atoms/Box"
-
-interface PageLayoutProps {
-  children: React.ReactNode
-  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false
-}
+import type { PageLayoutProps } from '@/interfaces/interface'
 
 export function PageLayout({ children, maxWidth = "lg" }: PageLayoutProps) {
   return (

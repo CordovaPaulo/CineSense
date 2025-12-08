@@ -2,12 +2,7 @@
 
 import { Box } from "../atoms/Box"
 import { Container } from "../atoms/Container"
-import type { ReactNode } from "react"
-
-interface PageContainerProps {
-  children: ReactNode
-  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl"
-}
+import type { PageContainerProps } from '@/interfaces/interface'
 
 export function PageContainer({ children, maxWidth = "lg" }: PageContainerProps) {
   return (

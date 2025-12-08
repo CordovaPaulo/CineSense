@@ -1,14 +1,7 @@
 "use client"
 
 import { Box, Avatar, Typography, Link as MuiLink } from "@mui/material"
-import type { SxProps } from "@mui/material"
-
-interface CompanyTileProps {
-  name: string
-  logoUrl?: string | null
-  href?: string | null
-  sx?: SxProps
-}
+import type { CompanyTileProps } from '@/interfaces/interface'
 
 export function CompanyTile({ name, logoUrl, href, sx }: CompanyTileProps) {
   const content = (

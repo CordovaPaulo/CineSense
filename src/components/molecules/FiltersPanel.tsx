@@ -1,20 +1,8 @@
 import React from "react";
 import { Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import type { FiltersPanelProps } from '@/interfaces/interface'
 
-interface Props {
-  genre: string;
-  year: string | number | "";
-  third: string;
-  onGenreChange: (e: any) => void;
-  onYearChange: (e: any) => void;
-  onThirdChange: (e: any) => void;
-  genres: string[];
-  years: (number | string)[];
-  thirdOptions: string[];
-  thirdLabel?: string;
-}
-
-export const FiltersPanel: React.FC<Props> = ({
+export const FiltersPanel: React.FC<FiltersPanelProps> = ({
   genre,
   year,
   third,

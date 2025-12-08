@@ -1,11 +1,4 @@
-export interface MockMovie {
-  id: number
-  title: string
-  poster_path: string | null
-  overview: string
-  release_date: string
-  vote_average: number
-}
+import type { MockMovie } from '@/interfaces/interface';
 
 export const MOCK_MOVIES: MockMovie[] = [
   {

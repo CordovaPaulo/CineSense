@@ -3,11 +3,7 @@
 import { ChatContainer as ChatContainerOrganism } from "../organisms/ChatContainer"
 import type { ReactNode } from "react"
 import type { SxProps, Theme } from "@mui/material"
-
-interface ChatContainerProps {
-  children: ReactNode
-  sx?: SxProps<Theme>
-}
+import type { ChatContainerProps } from '@/interfaces/interface'
 
 export function ChatContainer({ children, sx }: ChatContainerProps) {
   return (

@@ -5,13 +5,7 @@ import { Box } from "../atoms/Box"
 import { Input } from "../atoms/Input"
 import { IconButton } from "../atoms/IconButton"
 import { SendIcon } from "../atoms/Icon"
-
-interface ChatInputFieldProps {
-  value: string
-  onChange: (value: string) => void
-  onSubmit: () => void
-  disabled?: boolean
-}
+import type { ChatInputFieldProps } from '@/interfaces/interface'
 
 export function ChatInputField({ value, onChange, onSubmit, disabled }: ChatInputFieldProps) {
   const handleKeyPress = (e: React.KeyboardEvent) => {

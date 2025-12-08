@@ -15,7 +15,7 @@ import { CompanyTile } from '@/components/molecules/CompanyTile';
 import LanguageIcon from '@mui/icons-material/Language';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import type { TVShow } from '@/interfaces/interface';
+import type { TVShow, FullShowCardProps } from '@/interfaces/interface';
 import { formatRuntimeMinutes } from '@/lib/format-utils';
 
 const IMAGE_BASE = process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL ?? 'https://image.tmdb.org/t/p';
@@ -44,12 +44,6 @@ type FullPayloadShow = TVShow & {
   status?: string | null;
   vote_count?: number;
 };
-
-interface FullShowCardProps {
-  show: FullPayloadShow;
-  className?: string;
-  showGenres?: boolean;
-}
 
 export const FullShowCard = memo(function FullShowCard({
   show,
@@ -161,7 +155,7 @@ export const FullShowCard = memo(function FullShowCard({
             <Stack spacing={0.75}>
               <Typography variant="subtitle2">Languages</Typography>
               <Typography variant="body2">
-                Spoken: {show.spoken_languages?.map((l) => l.english_name ?? l.name).filter(Boolean).join(', ') || '—'}
+                Spoken: {show.spoken_languages?.map((l: any) => l.english_name ?? l.name).filter(Boolean).join(', ') || '—'}
               </Typography>
               <Typography variant="body2">
                 Languages: {show.languages?.join(', ') || '—'}
@@ -181,7 +175,7 @@ export const FullShowCard = memo(function FullShowCard({
           </Typography>
           <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 2 }}>
             {show.networks?.length ? (
-              show.networks.map((n) => (
+              show.networks.map((n: any) => (
                 <Stack
                   key={n.id}
                   direction="row"
@@ -230,7 +224,7 @@ export const FullShowCard = memo(function FullShowCard({
               </Typography>
               <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 1, mb: 2 }}>
                 {show.production_companies.length ? (
-                  show.production_companies.map((pc) => (
+                  show.production_companies.map((pc: any) => (
                     <CompanyTile key={pc.id} name={pc.name} logoUrl={pc.logo_path ? `${IMAGE_BASE}/w92${pc.logo_path}` : undefined} />
                   ))
                 ) : (

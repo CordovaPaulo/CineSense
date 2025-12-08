@@ -11,6 +11,7 @@ import { IconButton } from "../atoms/IconButton"
 import { CloseIcon, TvIcon } from "../atoms/Icon"
 import { RatingDisplay } from "../molecules/RatingDisplay"
 import type { TVShow as ShowDetail } from "@/interfaces/interface"
+import type { TVShow, ShowCardProps } from '@/interfaces/interface'
 import FullShowCard from "@/components/cards/full-show-card"
 import { fetchTVShowById } from "@/services/tmdb-service"
 
@@ -23,17 +24,6 @@ type TmdbShow = {
   poster_path?: string | null
   vote_average?: number
   first_air_date?: string
-}
-
-interface ShowCardProps {
-  title?: string
-  posterPath?: string | null
-  rating?: number
-  releaseYear?: number | string
-  description?: string
-  show?: TmdbShow
-  onClick?: () => void
-  imageSize?: "w185" | "w342" | "w500"
 }
 
 export function ShowCard({

@@ -1,11 +1,7 @@
 "use client"
 
 import { Grid } from "../atoms/Grid"
-
-interface ContentGridProps {
-  children: React.ReactNode
-  spacing?: number
-}
+import type { ContentGridProps } from '@/interfaces/interface'
 
 export function ContentGrid({ children, spacing = 3 }: ContentGridProps) {
   return (

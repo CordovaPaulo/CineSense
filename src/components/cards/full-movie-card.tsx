@@ -15,7 +15,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import type { Movie } from '@/interfaces/interface';
+import type { Movie, FullMovieCardProps } from '@/interfaces/interface';
 import { formatRuntime, formatCurrency } from '@/lib/format-utils';
 
 // Base TMDB image URL (poster/backdrop sizes can be adjusted)
@@ -40,12 +40,6 @@ type FullPayloadMovie = Movie & {
   vote_count?: number;
   origin_country?: string[];
 };
-
-interface FullMovieCardProps {
-  movie: FullPayloadMovie;
-  className?: string;
-  showGenres?: boolean;
-}
 
 export const FullMovieCard = memo(function FullMovieCard({
   movie,
@@ -195,7 +189,7 @@ export const FullMovieCard = memo(function FullMovieCard({
               <Stack spacing={0.75}>
                 <Typography variant="subtitle2">Languages</Typography>
                 <Typography variant="body2">
-                  Spoken: {movie.spoken_languages?.map(l => l.english_name || l.name).filter(Boolean).join(', ') || '—'}
+                  Spoken: {movie.spoken_languages?.map((l: any) => l.english_name || l.name).filter(Boolean).join(', ') || '—'}
                 </Typography>
               </Stack>
 
@@ -222,7 +216,7 @@ export const FullMovieCard = memo(function FullMovieCard({
             </Typography>
             <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 1, mb: 2 }}>
               {movie.production_companies?.length ? (
-                movie.production_companies.map(pc => (
+                movie.production_companies.map((pc: any) => (
                   <CompanyTile
                     key={pc.id}
                     name={pc.name}
@@ -240,7 +234,7 @@ export const FullMovieCard = memo(function FullMovieCard({
             </Typography>
             <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 2 }}>
               {movie.production_countries?.length
-                ? movie.production_countries.map(c => (
+                ? movie.production_countries.map((c: any) => (
                     <Chip
                       key={c.iso_3166_1 ?? c.name}
                       label={c.name || c.iso_3166_1 || 'Unknown'}

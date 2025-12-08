@@ -1,12 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { UseFetchOptions } from '@/interfaces/interface';
 
 type FetchType = "movie" | "show";
-
-export interface UseFetchOptions {
-  params?: Record<string, string | number | boolean | undefined | null>;
-  endpoints?: Partial<Record<FetchType, string>>;
-  enabled?: boolean;
-}
 
 export default function useFetch<T = unknown>(
   type: FetchType,

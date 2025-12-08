@@ -6,23 +6,11 @@ import {
   keepPreviousData,
 } from '@tanstack/react-query';
 import { fetchMovies, fetchMovieById } from '@/services/tmdb-service';
-import type { Movie, BrowseOptions, TMDBResponse } from '@/interfaces/interface';
+import type { Movie, BrowseOptions, TMDBResponse, UseMoviesResult, UseMovieByIdResult } from '@/interfaces/interface';
 
 const moviesKey = (opts: BrowseOptions): QueryKey => ['movies', opts];
 const movieKey = (id: number | null): QueryKey => ['movie', id];
 
-export interface UseMoviesResult {
-  movies: Movie[];
-  loading: boolean;
-  error: string | null;
-  page: number;
-  totalPages: number;
-  totalResults: number;
-  refetch: () => void;
-  loadMore: () => void;
-  hasMore: boolean;
-  isFetchingNext: boolean;
-}
 
 export function useMovies(options: BrowseOptions = {}): UseMoviesResult {
   const {
@@ -76,12 +64,6 @@ export function useMovies(options: BrowseOptions = {}): UseMoviesResult {
   };
 }
 
-export interface UseMovieByIdResult {
-  movie: Movie | null;
-  loading: boolean;
-  error: string | null;
-  refetch: () => void;
-}
 
 export function useMovieById(id: number | null): UseMovieByIdResult {
   const { data, error, isLoading, refetch } = useQuery<Movie, Error>({

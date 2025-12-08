@@ -1,11 +1,7 @@
 "use client"
 
 import { Button as MuiButton, type ButtonProps as MuiButtonProps } from "@mui/material"
-import type { SxProps, Theme } from "@mui/material"
-
-interface ButtonProps extends Omit<MuiButtonProps, 'sx'> {
-  sx?: SxProps<Theme>
-}
+import type { ButtonProps } from '@/interfaces/interface'
 
 export function Button({ children, sx, ...props }: ButtonProps) {
   return (

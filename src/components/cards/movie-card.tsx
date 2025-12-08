@@ -26,24 +26,15 @@ import { fetchMovieById } from '@/services/tmdb-service';
 const IMG_BASE = process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL ?? 'https://image.tmdb.org/t/p';
 
 type TmdbMovie = {
-  id: number;
-  title: string;
-  overview?: string;
-  poster_path?: string | null;
-  vote_average?: number;
-  release_date?: string;
-};
-
-interface MovieCardProps {
-  title?: string;
-  posterPath?: string | null;
-  rating?: number;
-  releaseYear?: number | string;
-  description?: string;
-  movie?: TmdbMovie;
-  onClick?: () => void;
-  imageSize?: 'w185' | 'w342' | 'w500';
+  id: number
+  title: string
+  overview?: string
+  poster_path?: string | null
+  vote_average?: number
+  release_date?: string
 }
+
+import type { MovieCardProps } from '@/interfaces/interface'
 
 export function MovieCard({
   title,
@@ -53,7 +44,7 @@ export function MovieCard({
   description,
   movie,
   onClick,
-  imageSize = 'w342',
+  imageSize = "w342",
 }: MovieCardProps) {
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [details, setDetails] = useState<MovieDetail | null>(null);

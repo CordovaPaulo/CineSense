@@ -2,11 +2,7 @@
 
 import { Box } from "../atoms/Box"
 import { ChatContainer } from "../organisms/ChatContainer"
-
-interface ChatLayoutProps {
-  messages: React.ReactNode
-  input: React.ReactNode
-}
+import type { ChatLayoutProps } from '@/interfaces/interface'
 
 export function ChatLayout({ messages, input }: ChatLayoutProps) {
   return (

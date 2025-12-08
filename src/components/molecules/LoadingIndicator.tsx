@@ -3,10 +3,7 @@
 import { Box } from "../atoms/Box"
 import { Spinner } from "../atoms/Spinner"
 import { BodyText } from "../atoms/Text"
-
-interface LoadingIndicatorProps {
-  message?: string
-}
+import type { LoadingIndicatorProps } from '@/interfaces/interface'
 
 export function LoadingIndicator({ message = "Loading..." }: LoadingIndicatorProps) {
   return (

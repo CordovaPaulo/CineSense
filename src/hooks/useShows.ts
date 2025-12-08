@@ -6,23 +6,11 @@ import {
   keepPreviousData,
 } from '@tanstack/react-query';
 import { fetchTVShows, fetchTVShowById } from '@/services/tmdb-service';
-import type { TVShow, BrowseOptions, TMDBResponse } from '@/interfaces/interface';
+import type { TVShow, BrowseOptions, TMDBResponse, UseShowsResult, UseShowByIdResult } from '@/interfaces/interface';
 
 const showsKey = (opts: BrowseOptions): QueryKey => ['shows', opts];
 const showKey = (id: number | null): QueryKey => ['show', id];
 
-export interface UseShowsResult {
-  shows: TVShow[];
-  loading: boolean;
-  error: string | null;
-  page: number;
-  totalPages: number;
-  totalResults: number;
-  refetch: () => void;
-  loadMore: () => void;
-  hasMore: boolean;
-  isFetchingNext: boolean;
-}
 
 export function useShows(options: BrowseOptions = {}): UseShowsResult {
   const {
@@ -71,12 +59,6 @@ export function useShows(options: BrowseOptions = {}): UseShowsResult {
   };
 }
 
-export interface UseShowByIdResult {
-  show: TVShow | null;
-  loading: boolean;
-  error: string | null;
-  refetch: () => void;
-}
 
 export function useShowById(id: number | null): UseShowByIdResult {
   const { data, error, isLoading, refetch } = useQuery<TVShow, Error>({

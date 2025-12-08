@@ -3,11 +3,7 @@
 import { Box } from "../atoms/Box"
 import { Rating } from "../atoms/Rating"
 import { BodyText } from "../atoms/Text"
-
-interface RatingDisplayProps {
-  rating: number
-  size?: "small" | "medium" | "large"
-}
+import type { RatingDisplayProps } from '@/interfaces/interface'
 
 export function RatingDisplay({ rating, size = "small" }: RatingDisplayProps) {
   return (

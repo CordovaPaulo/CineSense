@@ -2,14 +2,7 @@
 
 import { Card, CardMedia, CardContent, Typography, Box, Rating } from "@mui/material"
 
-interface ChatCardProps {
-  title: string
-  // accept null from API
-  posterPath?: string | null
-  rating?: number
-  date?: number
-  description?: string
-}
+import type { ChatCardProps } from '@/interfaces/interface'
 
     export function ChatCard({ title, posterPath, rating, date, description }: ChatCardProps) {
   return (

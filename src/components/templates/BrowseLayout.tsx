@@ -3,12 +3,7 @@
 import { Box } from "../atoms/Box"
 import { Heading } from "../atoms/Text"
 import { Grid } from "../atoms/Grid"
-
-interface BrowseLayoutProps {
-  title: string
-  children: React.ReactNode
-  headerActions?: React.ReactNode
-}
+import type { BrowseLayoutProps } from '@/interfaces/interface'
 
 export function BrowseLayout({ title, children, headerActions }: BrowseLayoutProps) {
   return (

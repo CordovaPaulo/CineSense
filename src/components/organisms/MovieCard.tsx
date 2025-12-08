@@ -10,7 +10,7 @@ import { Dialog, DialogTitle, DialogContent } from "../atoms/Dialog"
 import { IconButton } from "../atoms/IconButton"
 import { CloseIcon, MovieFilterRoundedIcon } from "../atoms/Icon"
 import { RatingDisplay } from "../molecules/RatingDisplay"
-import type { Movie as MovieDetail } from "@/interfaces/interface"
+import type { Movie as MovieDetail, MovieCardProps } from "@/interfaces/interface"
 import FullMovieCard from "@/components/cards/full-movie-card"
 import { fetchMovieById } from "@/services/tmdb-service"
 
@@ -23,17 +23,6 @@ type TmdbMovie = {
   poster_path?: string | null
   vote_average?: number
   release_date?: string
-}
-
-interface MovieCardProps {
-  title?: string
-  posterPath?: string | null
-  rating?: number
-  releaseYear?: number | string
-  description?: string
-  movie?: TmdbMovie
-  onClick?: () => void
-  imageSize?: "w185" | "w342" | "w500"
 }
 
 export function MovieCard({

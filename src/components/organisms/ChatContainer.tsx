@@ -2,11 +2,7 @@
 
 import { Paper } from "../atoms/Paper"
 import type { SxProps, Theme } from "@mui/material"
-
-interface ChatContainerProps {
-  children: React.ReactNode
-  sx?: SxProps<Theme>
-}
+import type { ChatContainerProps } from '@/interfaces/interface'
 
 export function ChatContainer({ children, sx }: ChatContainerProps) {
   return (

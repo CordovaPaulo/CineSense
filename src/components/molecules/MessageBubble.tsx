@@ -3,12 +3,7 @@
 import { Box } from "../atoms/Box"
 import { Paper } from "../atoms/Paper"
 import { Text } from "../atoms/Text"
-
-interface MessageBubbleProps {
-  role: "user" | "assistant"
-  content: string
-  timestamp?: Date
-}
+import type { MessageBubbleProps } from '@/interfaces/interface'
 
 export function MessageBubble({ role, content, timestamp }: MessageBubbleProps) {
   const isUser = role === "user"

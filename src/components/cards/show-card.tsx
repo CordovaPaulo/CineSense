@@ -32,16 +32,7 @@ type TmdbShow = {
   first_air_date?: string;
 };
 
-interface ShowCardProps {
-  title?: string;
-  posterPath?: string | null;
-  rating?: number;
-  firstAirYear?: number | string;
-  description?: string;
-  show?: TmdbShow;
-  onClick?: () => void;
-  imageSize?: 'w185' | 'w342' | 'w500';
-}
+import type { ShowCardProps } from '@/interfaces/interface'
 
 export function ShowCard({
   title,

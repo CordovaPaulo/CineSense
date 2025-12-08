@@ -2,11 +2,7 @@
 
 import { Box } from "../atoms/Box"
 import { BodyText } from "../atoms/Text"
-
-interface EmptyMessageProps {
-  message?: string
-  icon?: React.ReactNode
-}
+import type { EmptyMessageProps } from '@/interfaces/interface'
 
 export function EmptyMessage({ message = "No items found", icon }: EmptyMessageProps) {
   return (
