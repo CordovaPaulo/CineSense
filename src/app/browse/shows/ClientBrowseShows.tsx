@@ -12,14 +12,6 @@ import type { TVShow } from '@/interfaces/interface';
 import { keyframes } from "@mui/system";
 
 
-interface TVShow {
-  id: number;
-  name: string;
-  poster_path: string | null;
-  overview: string;
-  first_air_date: string;
-  vote_average: number;
-}
 
 export default function ClientBrowseShows() {
   const [searchQuery, setSearchQuery] = useState("");

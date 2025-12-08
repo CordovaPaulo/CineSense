@@ -4,6 +4,7 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { MuiThemeProvider } from "../lib/mui-theme-provider"
 import { Navbar } from "../components/layout/navbar"
+import Footer from "../components/layout/footer"
 import { QueryProvider } from "@/lib/query-client-provider";
 import PrefetcherLazy from '@/components/PrefetcherLazy';
 
