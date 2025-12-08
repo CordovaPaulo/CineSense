@@ -18,7 +18,9 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import MovieFilterRoundedIcon from '@mui/icons-material/MovieFilterRounded';
 import type { Movie as MovieDetail } from '@/interfaces/interface';
-import FullMovieCard from './full-movie-card';
+import dynamic from 'next/dynamic';
+
+const FullMovieCard = dynamic(() => import('./full-movie-card'), { ssr: false });
 import { fetchMovieById } from '@/services/tmdb-service';
 
 const IMG_BASE = process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL ?? 'https://image.tmdb.org/t/p';

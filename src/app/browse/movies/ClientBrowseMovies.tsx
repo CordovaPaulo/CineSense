@@ -9,15 +9,7 @@ import { buildMovieFilters } from "@/lib/filter-utils";
 import useBrowseList from "@/hooks/useBrowseList";
 import { keyframes } from "@mui/system"; // keyframes for subtle animation
 import { MovieCard } from "@/components/cards/movie-card";
-
-interface Movie {
-  id: number;
-  title: string;
-  poster_path: string | null;
-  overview: string;
-  release_date: string;
-  vote_average: number;
-}
+import type { Movie } from '@/interfaces/interface';
 
 const fadeSlideUp = keyframes`
   0% {

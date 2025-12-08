@@ -43,7 +43,6 @@ export function useShows(options: BrowseOptions = {}): UseShowsResult {
   });
 
   const aggregate = useMemo(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const infinite = data as any;
     if (!infinite || !infinite.pages) {
       return { shows: [] as TVShow[], page: 1, totalPages: 0, totalResults: 0 };

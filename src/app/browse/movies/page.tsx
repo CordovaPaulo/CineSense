@@ -1,49 +1,25 @@
-'use client';
+import React, { Suspense } from 'react';
+import ClientBrowseMovies from './ClientBrowseMovies';
+import { getPopularMovies } from '@/lib/tmdb-server';
+import type { Metadata } from 'next';
 
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import useDebounce from "@/hooks/useDebounce";
-import { Box, Container, Typography, Button } from "@mui/material";
-import { FiltersPanel, PaginationControls } from "@/components/molecules";
-import { buildMovieFilters } from "@/lib/filter-utils";
-import useBrowseList from "@/hooks/useBrowseList";
-import { keyframes } from "@mui/system"; // <-- import keyframes her"
-import { MovieCard } from "@/components/cards/movie-card";
+export const revalidate = 60; // ISR: revalidate this page every 60 seconds
 
-interface Movie {
-  id: number;
-  title: string;
-  poster_path: string | null;
-  overview: string;
-  release_date: string;
-  vote_average: number;
+export async function generateMetadata(): Promise<Metadata> {
+  // Fetch a popular movie to use for metadata preview
+  const popular = await getPopularMovies(1);
+  const first = popular?.[0];
+
+  return {
+    title: first ? `${first.title} — Browse Movies` : 'Browse Movies',
+    description: first ? first.overview : 'Browse movies on Cinesense',
+    openGraph: {
+      title: first ? `${first.title} — Browse Movies` : 'Browse Movies',
+      description: first ? first.overview : 'Browse movies on Cinesense',
+      images: first && first.poster_path ? [{ url: `${process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}/w500${first.poster_path}` }] : [],
+    },
+  };
 }
-
-const fadeSlideUp = keyframes`
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const fadeSlideUp2 = keyframes`
-  0% {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-
-import React, { Suspense } from "react";
-import ClientBrowseMovies from "./ClientBrowseMovies";
 
 export default function Page() {
   return (

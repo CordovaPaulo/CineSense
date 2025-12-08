@@ -20,6 +20,11 @@ export interface TVShow {
   genre_ids: number[];
 }
 
+export interface Genre {
+  id: number;
+  name: string;
+}
+
 export interface TMDBResponse<T> {
   page: number;
   results: T[];
@@ -55,4 +60,29 @@ export interface ChatResponse {
   greeting?: string;
   recommendations?: ChatRecommendation[];
   reply?: string;
+}
+
+// Analysis layer types
+export interface Sentiment {
+  score: number; // -1..1
+  label: 'negative' | 'neutral' | 'positive';
+}
+
+export interface SafetyFlags {
+  nsfw?: boolean;
+  violence?: boolean;
+  adult?: boolean;
+  other?: string[];
+}
+
+export interface AnalysisResult {
+  intent: string;
+  sentiment: Sentiment;
+  topics: string[];
+  embeddings?: number[];
+  explicitFilters?: Record<string, any>;
+  personalizationScore?: number;
+  safety?: SafetyFlags;
+  confidence?: number;
+  explanation?: string;
 }

@@ -50,13 +50,15 @@ export async function prefetch(url: string, init?: RequestInit) {
   try {
     // attempt a fetch and cache; swallow errors
     await fetchAndCache(url, init);
-  } catch (e) {
+  } catch (_e) {
     // noop
   }
 }
 
-export default {
+const fetchCacheHelper = {
   getCached,
   fetchAndCache,
   prefetch,
 };
+
+export default fetchCacheHelper;

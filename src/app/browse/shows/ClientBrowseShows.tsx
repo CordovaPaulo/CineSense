@@ -8,6 +8,7 @@ import useBrowseList from "@/hooks/useBrowseList";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import useDebounce from "@/hooks/useDebounce";
 import { ShowCard } from "@/components/cards/show-card";
+import type { TVShow } from '@/interfaces/interface';
 import { keyframes } from "@mui/system";
 
 

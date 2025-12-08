@@ -16,7 +16,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import type { TVShow } from '@/interfaces/interface';
-import { formatRuntimeMinutes } from '@/components/utils/runtime-formatter';
+import { formatRuntimeMinutes } from '@/lib/format-utils';
 
 const IMAGE_BASE = process.env.NEXT_PUBLIC_TMDB_IMAGE_BASE_URL ?? 'https://image.tmdb.org/t/p';
 

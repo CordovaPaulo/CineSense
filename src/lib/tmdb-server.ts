@@ -1,3 +1,5 @@
+import type { Movie, TVShow } from '@/interfaces/interface';
+
 const TMDB_API_KEY = process.env.TMDB_API_KEY
 const TMDB_BASE_URL = process.env.TMDB_BASE_URL
 
@@ -5,27 +7,7 @@ if (!TMDB_API_KEY) {
   console.warn("TMDB_API_KEY environment variable is not set")
 }
 
-export interface Movie {
-  id: number
-  title: string
-  poster_path: string | null
-  backdrop_path: string | null
-  overview: string
-  release_date: string
-  vote_average: number
-  genre_ids: number[]
-}
-
-export interface Show {
-  id: number
-  name: string
-  poster_path: string | null
-  backdrop_path: string | null
-  overview: string
-  first_air_date: string
-  vote_average: number
-  genre_ids: number[]
-}
+type Show = TVShow;
 
 // Fetch popular movies
 export async function getPopularMovies(page = 1) {

@@ -11,8 +11,10 @@ import {
 import { MovieCard } from '@/components/cards/movie-card';
 import { ShowCard } from '@/components/cards/show-card';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
-import { ChatContainer } from '@/components/chat/chat-container';
-import { ChatInput } from '@/components/chat/chat-input';
+import dynamic from 'next/dynamic';
+
+const ChatContainer = dynamic(() => import('@/components/chat/chat-container').then((mod) => mod.ChatContainer), { ssr: false });
+const ChatInput = dynamic(() => import('@/components/chat/chat-input').then((mod) => mod.ChatInput), { ssr: false });
 import { keyframes } from "@mui/system"; // <-- import keyframes her"
 import { ChatMessage } from '@/components/chat/chat-message';
 import useChat from '@/hooks/useChat';
@@ -79,7 +81,7 @@ export default function Chat() {
   };
 
   // useChat hook handles the network call and common state
-  const { sendMessage, loading: chatLoading } = useChat();
+  const { sendMessage } = useChat();
 
   const sendToAi = async (userText: string, history: ChatItem[]) => {
     setLoading(true);

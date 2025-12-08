@@ -1,9 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Film, Tv, MessageCircle, Scroll, Rotate3D } from 'lucide-react';
 import { Box, Typography, Grid, Button } from '@mui/material';
-import { keyframes, width } from "@mui/system"; // <-- import keyframes her"
+import { keyframes, width } from "@mui/system"; 
 import ScrollAppear from "../components/ScrollAppear/ScrollAppear";
 import ScrollGlowGradient from "../components/ScrollMouseGradient/ScrollMouseGradient";
 
@@ -28,20 +27,6 @@ const fadeSlideUp2 = keyframes`
     transform: translateY(0);
   }
 `;
-
-const AnimateonScroll = keyframes `
-  from {
-  opacity: 0;
-  scale: 0.4;
-  }
-
-  to {
-  opacity: 1
-  scale:1
-}
-`;
-
-
 
 export default function Home() {
   return (
@@ -361,7 +346,6 @@ export default function Home() {
                 color: "var(--main-text-color)", // text-main-text-color
                 mb: 4, // mb-5 ≈ 20px
                 transition: "color 0.2s ease-out",
-                // color: "#FFB22C",
                 fontWeight: "800",
                 textShadow: "2px 2px 11.3px rgba(255, 255, 255, 0.6)"
                   }}
@@ -371,7 +355,7 @@ export default function Home() {
 
             <Typography
               sx={{
-                fontSize: "16px", // text-lg
+                fontSize: "16px",
                 color: "var(--main-text-color)",
                 transition: "color 0.2s ease-out",
                  }}
