@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function Page() {
   return (
-    <Suspense fallback={<div />}> 
+    <Suspense fallback={<div>Loading movies…</div>}>
       <ClientBrowseMovies />
     </Suspense>
   );

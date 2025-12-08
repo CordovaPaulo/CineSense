@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import type { ChangeEvent } from "react";
 import { Box, Container, Typography, Button } from "@mui/material";
 import { FiltersPanel, PaginationControls } from "@/components/molecules";
 import { buildShowFilters } from "@/lib/filter-utils";
@@ -10,9 +11,6 @@ import useDebounce from "@/hooks/useDebounce";
 import { ShowCard } from "@/components/cards/show-card";
 import type { TVShow } from '@/interfaces/interface';
 import { keyframes } from "@mui/system";
-
-
-
 export default function ClientBrowseShows() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState<number>(1);
@@ -25,6 +23,7 @@ export default function ClientBrowseShows() {
   const pathname = usePathname();
   const debouncedQuery = useDebounce(searchQuery, 500);
 
+  // Initialize from URL params when they change (keeps state in sync on navigation)
   useEffect(() => {
     const q = searchParams?.get("q") ?? "";
     const p = parseInt(searchParams?.get("page") ?? "1", 10) || 1;
@@ -36,12 +35,13 @@ export default function ClientBrowseShows() {
     setGenre(g);
     setYear(y);
     setEpisodes(e);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [searchQuery, genre, year, episodes]);
+  // Reset page when relevant inputs change (search/filters)
+  useEffect(() => setPage(1), [debouncedQuery, genre, year, episodes]);
 
+  // Keep the URL updated when state changes
   useEffect(() => {
     const params = new URLSearchParams();
     if (debouncedQuery) params.set("q", debouncedQuery);
@@ -57,10 +57,10 @@ export default function ClientBrowseShows() {
 
   const { items: tvShows, loading, error, totalPages } = useBrowseList<TVShow>("tv", debouncedQuery, { page, filters });
 
-  // Handlers
-  const handleGenreChange = (event: any) => setGenre(event.target.value);
-  const handleYearChange = (event: any) => setYear(event.target.value);
-  const handleEpisodesChange = (event: any) => setEpisodes(event.target.value);
+  // Handlers (typed)
+  const handleGenreChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setGenre(event.target.value);
+  const handleYearChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setYear(event.target.value);
+  const handleEpisodesChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setEpisodes(event.target.value);
 
   // Dropdown Data
   const genres = [

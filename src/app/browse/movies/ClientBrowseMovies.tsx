@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import type { ChangeEvent } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import useDebounce from "@/hooks/useDebounce";
 import { Box, Container, Typography, Button } from "@mui/material";
@@ -34,16 +35,17 @@ export default function ClientBrowseMovies() {
   const [duration, setDuration] = useState("");
   const filters = buildMovieFilters(genre, year, duration);
 
-  useEffect(() => {
-    setPage(1);
-  }, [searchQuery, genre, year, duration]);
+  // Reset page to 1 when search or filters change
+  useEffect(() => setPage(1), [debouncedQuery, genre, year, duration]);
 
   const { items: movies, loading, error, totalPages } = useBrowseList<Movie>("movie", debouncedQuery, { page, filters });
 
-  const handleGenreChange = (event: any) => setGenre(event.target.value);
-  const handleYearChange = (event: any) => setYear(event.target.value);
-  const handleDurationChange = (event: any) => setDuration(event.target.value);
+  // Typed handlers
+  const handleGenreChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setGenre(event.target.value);
+  const handleYearChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setYear(event.target.value);
+  const handleDurationChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setDuration(event.target.value);
 
+  // Initialize state from URL search params (keeps URL <> state in sync on mount/route change)
   useEffect(() => {
     const q = searchParams?.get("q") ?? "";
     const p = parseInt(searchParams?.get("page") ?? "1", 10) || 1;
@@ -55,8 +57,10 @@ export default function ClientBrowseMovies() {
     setGenre(g);
     setYear(y);
     setDuration(d);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
+  // Update URL when relevant state changes (debounced search, page, filters)
   useEffect(() => {
     const params = new URLSearchParams();
     if (debouncedQuery) params.set("q", debouncedQuery);
