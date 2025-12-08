@@ -12,7 +12,16 @@ interface Props {
 export const PaginationControls: React.FC<Props> = ({ page, totalPages, loading, onPrev, onNext }) => {
   return (
     <Box className="mt-6 flex items-center justify-center gap-4">
-      <Button variant="contained" color="secondary" onClick={onPrev} disabled={page <= 1 || loading}>
+      <Button variant="outlined" onClick={onPrev} disabled={page <= 1 || loading}
+      sx={{
+        backgroundColor: "none",
+        border: "1px solid #FFB22C",
+        color: "#FFB22C",
+        "&:hover": {
+          border: "1px solid #FFB22C",
+          backgroundColor: "rgba(255, 178, 44, 0.1)", // optional hover effect
+        },
+      }}>
         Prev
       </Button>
 
@@ -20,7 +29,16 @@ export const PaginationControls: React.FC<Props> = ({ page, totalPages, loading,
         Page {page}{totalPages ? ` of ${totalPages}` : ""}
       </Typography>
 
-      <Button variant="contained" color="secondary" onClick={onNext} disabled={loading || (totalPages ? page >= totalPages : false)}>
+      <Button variant="outlined" onClick={onNext} disabled={loading || (totalPages ? page >= totalPages : false)}
+        sx={{
+          backgroundColor: "none",
+        border: "1px solid #FFB22C",
+        color: "#FFB22C",
+        "&:hover": {
+          border: "1px solid #FFB22C",
+          backgroundColor: "rgba(255, 178, 44, 0.1)", // optional hover effect
+        },
+        }}>
         Next
       </Button>
     </Box>

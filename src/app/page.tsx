@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Box, Typography, Grid, Button } from '@mui/material';
-import { keyframes } from "@mui/system";
+import { keyframes, width } from "@mui/system"; 
 import ScrollAppear from "../components/ScrollAppear/ScrollAppear";
 import ScrollGlowGradient from "../components/ScrollMouseGradient/ScrollMouseGradient";
 
@@ -182,7 +182,7 @@ export default function Home() {
             </Link>
           </Grid>
 
-          <Grid sx={{ width: '100%', maxWidth: 380, height: 300}}>
+          <Grid sx={{ width: '100%', maxWidth: 330, height: 300}}>
             <Link href="/browse/movies" className="group h-full block">
             <ScrollAppear>
               <Box sx={{
@@ -190,7 +190,7 @@ export default function Home() {
                 backgroundColor: "homecard", // assuming this is in your theme palette
                 borderRadius: 3, // rounded-xl ≈ theme.spacing(3)
                 p: 8, // padding: theme.spacing(8 / 4) = 2rem, same as p-8
-                height: "100%", // h-full
+                height: "415px", // h-full
                 display: "flex",
                 // width: "430px",
                 flexDirection: "column",
@@ -206,11 +206,11 @@ export default function Home() {
               }} className="w-96 bg-homecard rounded-xl p-8 transition-transform duration-300 ease-out hover:shadow-xl hover:shadow-primary/20 h-full flex flex-col justify-center text-center transform-gpu hover:z-10">
                 <Typography variant='h2' color='#FFBD4C' sx={{
                   fontWeight: "800",
-                  pb:"70px",
+                  pb:"50px",
                   textShadow: "2px 2px 11.3px rgba(255, 189, 76, 0.6)",
                   // pb: "20px"s
                 }}>Browse TV Shows</Typography>
-                <p className="text-main-text-color mb-20">
+                <p className="text-main-text-color mb-25">
                   Discover trending series and binge-worthy shows from around the world.
                 </p>
                 <Button
@@ -221,7 +221,8 @@ export default function Home() {
                     color: 'text.primary',
                     borderColor: 'text.primary',
                     pt: 1.5,
-                    pb:1.5,
+                    pb:1.0,
+                    mt: -7,
                     '&:hover': {
                       backgroundColor: 'text.primary',
                       borderColor: 'text.primary',
@@ -346,7 +347,7 @@ export default function Home() {
                 mb: 4, // mb-5 ≈ 20px
                 transition: "color 0.2s ease-out",
                 fontWeight: "800",
-                textShadow: "2px 2px 11.3px rgba(255, 189, 76, 0.6)"
+                textShadow: "2px 2px 11.3px rgba(255, 255, 255, 0.6)"
                   }}
                 >
                   {feature.title}

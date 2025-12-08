@@ -52,6 +52,7 @@ export default function RootLayout({
             <Navbar />
             <PrefetcherLazy />
             {children}
+            <Footer />
           </MuiThemeProvider>
           <Analytics />
         </QueryProvider>

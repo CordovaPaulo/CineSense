@@ -9,6 +9,17 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import useDebounce from "@/hooks/useDebounce";
 import { ShowCard } from "@/components/cards/show-card";
 import type { TVShow } from '@/interfaces/interface';
+import { keyframes } from "@mui/system";
+
+
+interface TVShow {
+  id: number;
+  name: string;
+  poster_path: string | null;
+  overview: string;
+  first_air_date: string;
+  vote_average: number;
+}
 
 export default function ClientBrowseShows() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -83,12 +94,28 @@ export default function ClientBrowseShows() {
     "51+ episodes",
   ];
 
+  const fadeSlideUp = keyframes`
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  `;
+
   // 📅 Year dropdown (descending 2025 → 2000)
   const years = Array.from({ length: 26 }, (_, i) => 2025 - i);
 
   return (
     <Box
       sx={{ p: 4 }}
+      style={{
+        backgroundSize: "200% 200%",
+        animation: "pulse 5s ease-in-out infinite",
+        backgroundPosition: "100% 80%",
+      }}
       className="min-h-screen bg-linear-to-b from-[#000000] via-[#0f0a0a] to-[#6e0a0a]"
     >
       <Container maxWidth="lg">
@@ -97,6 +124,16 @@ export default function ClientBrowseShows() {
           <Typography variant="h2" color="secondary.main">
             Browse TV Shows
           </Typography>
+
+           <style>
+        {`
+          @keyframes pulse {
+             0% { background-position: 50% 0%; }
+            50% { background-position: 10% 100%; }
+            100% { background-position: 100% 0%; }
+          }
+        `}
+      </style>
 
           <Box className="flex flex-wrap items-center gap-4">
             <FiltersPanel
@@ -166,3 +203,4 @@ export default function ClientBrowseShows() {
     </Box>
   );
 }
+
