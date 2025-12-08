@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { parseContents } from '@/services/gemini';
+import { analyzeConversation } from '@/services/analysis';
 import { searchMovies, searchShows } from '@/lib/tmdb-server';
+import { rerankRecommendations } from '@/services/reranker';
 
 const TMDB_BASE = process.env.TMDB_BASE_URL ?? 'https://api.themoviedb.org/3';
 const TMDB_TOKEN = process.env.TMDB_ACCESS_TOKEN;
@@ -33,12 +35,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Empty message' }, { status: 400 });
     }
 
+    // Run analysis layer to extract signals from the message + history
+    const analysis = await analyzeConversation({ message, history: history.map((h) => h.content) });
+
     // Build a clear prompt asking for a JSON response with recommendations
-    const systemIntro = `You are CineSense, an assistant that recommends movies and TV shows based on user preferences. Respond in JSON only with the shape: { greeting?: string, recommendations: [{ title: string, type: "Movie" | "TV Show", reason?: string }] }`;
+    const systemIntro = `You are CineSense, an assistant that recommends movies and TV shows based on user preferences. Use the analysis signals to guide your suggestions. Respond in JSON only with the shape: { greeting?: string, recommendations: [{ title: string, type: "Movie" | "TV Show", reason?: string }] }`;
     const convoLines = history
       .map((h) => `${h.role === 'user' ? 'User' : 'Assistant'}: ${h.content}`)
       .join('\n');
-    const prompt = [systemIntro, convoLines, `User: ${message}`, 'Assistant:'].filter(Boolean).join('\n\n');
+    // Attach analysis summary to the prompt to help the model
+    const analysisSummary = `Analysis: ${JSON.stringify({ intent: analysis.intent, sentiment: analysis.sentiment, topics: analysis.topics, explanation: analysis.explanation })}`;
+    const prompt = [systemIntro, analysisSummary, convoLines, `User: ${message}`, 'Assistant:'].filter(Boolean).join('\n\n');
 
     // Ask Gemini for a structured JSON reply using response schema
     const schema = {
@@ -101,7 +108,9 @@ export async function POST(req: Request) {
       resolved.push({ type: type.includes('tv') ? 'tv' : 'movie', reason, item: { title } });
     }
 
-    return NextResponse.json({ greeting, recommendations: resolved });
+    // Rerank recommendations using analysis signals (adds `_score` and ordering)
+    const reranked = rerankRecommendations(resolved, analysis, 10);
+    return NextResponse.json({ greeting, recommendations: reranked, analysis });
   } catch (e: any) {
     return NextResponse.json({ error: String(e?.message ?? e) }, { status: 500 });
   }

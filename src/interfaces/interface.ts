@@ -61,3 +61,28 @@ export interface ChatResponse {
   recommendations?: ChatRecommendation[];
   reply?: string;
 }
+
+// Analysis layer types
+export interface Sentiment {
+  score: number; // -1..1
+  label: 'negative' | 'neutral' | 'positive';
+}
+
+export interface SafetyFlags {
+  nsfw?: boolean;
+  violence?: boolean;
+  adult?: boolean;
+  other?: string[];
+}
+
+export interface AnalysisResult {
+  intent: string;
+  sentiment: Sentiment;
+  topics: string[];
+  embeddings?: number[];
+  explicitFilters?: Record<string, any>;
+  personalizationScore?: number;
+  safety?: SafetyFlags;
+  confidence?: number;
+  explanation?: string;
+}
