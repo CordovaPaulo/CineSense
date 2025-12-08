@@ -17,6 +17,7 @@ const ChatContainer = dynamic(() => import('@/components/chat/chat-container').t
 const ChatInput = dynamic(() => import('@/components/chat/chat-input').then((mod) => mod.ChatInput), { ssr: false });
 import { keyframes } from "@mui/system"; // <-- import keyframes her"
 import { ChatMessage } from '@/components/chat/chat-message';
+import { TypingIndicator } from '@/components/molecules/TypingIndicator';
 import useChat from '@/hooks/useChat';
 import type { ChatResponse } from '@/interfaces/interface';
 
@@ -363,6 +364,11 @@ export default function Chat() {
                     )}
                   </div>
                 ))}
+                {loading && (
+                  <div key="typing">
+                    <TypingIndicator />
+                  </div>
+                )}
               </>
             )}
             <div ref={messagesEndRef} />
